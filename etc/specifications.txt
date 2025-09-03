@@ -1,0 +1,47 @@
+# CS445: Specifications (of our Project)
+# Authors: Jack Sutera, Derek Li, Jackson Carey
+# Date: 9/3/2025
+
+Answer the following questions:
+
+(1) How will you use this application?
+
+
+(2) Where would the user be located physically when using this application?
+
+
+(3) Where would the results be visible?
+
+
+(4) When will this application be used?
+
+
+(5) When can the application fail?
+
+
+(6) Who is my user?
+
+
+(7) Who will deliver the inputs for the application?
+
+
+(8) Who will receive the outputs of the application?
+
+
+(9) What do I know about this application?
+
+
+(10) What does this application need to do?
+
+
+(11) What are the components of this application?
+
+
+(12) What needs to happen next?
+
+
+(13) What must happen before the next step?
+
+
+(14) What needs to be tracked?
+
