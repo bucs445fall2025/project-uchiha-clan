@@ -5,43 +5,57 @@
 Answer the following questions:
 
 (1) How will you use this application?
+To track macros throughout the day and recommend recipes for you to reach your macro goal
 
 
 (2) Where would the user be located physically when using this application?
+On their phones (likely), maybe a website.
 
 
 (3) Where would the results be visible?
+On the app/website, also the backend database.
 
 
 (4) When will this application be used?
+Daily, to stay on track for your macro goals. Likely before meals
 
 
 (5) When can the application fail?
+Servers are down, leans heavily on the user to be proactive and keep track of their food intake
 
 
 (6) Who is my user?
+Anyone looking to set dietary goals or keep track of nutrient intake
 
 
 (7) Who will deliver the inputs for the application?
+The user, (we will use a database of ingredients and macros)
 
 
 (8) Who will receive the outputs of the application?
+The user, they will see how many macros are in the food they're eating
 
 
 (9) What do I know about this application?
+Little experience with mobile applications but we know how to keep track of macros throughout the day and dieting
 
 
 (10) What does this application need to do?
+It needs to provide the user with an easy to use macro tracker
 
 
 (11) What are the components of this application?
+MVC
 
 
 (12) What needs to happen next?
+Start the backend database in MySQL
 
 
 (13) What must happen before the next step?
+Not sure
 
 
 (14) What needs to be tracked?
+All macros (carbs, protien, fats, Calories, etc.)
 
