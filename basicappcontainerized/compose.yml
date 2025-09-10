@@ -13,6 +13,18 @@ services:
     command: ["flask", "run", "--host=0.0.0.0"]
     ports:
       - "80:5000"
+    depends_on:
+      - mongo
+
+  
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"   # optional: expose DB to host
+    volumes:
+      - mongo_data:/data/db   # persist data
   # app2:
   #   image: app:latest
   #   build:
