@@ -34,7 +34,6 @@ Ideas:
   - Site where a user can complete the Blog, Search, and Public Interaction portions listed in the scope
   - Clean, aesthetic, neat site with smooth UI interactions
   - User can easily/efficiently track Calories/macros throughout their day
-? Probably need to add more here, unsure of what else is needed. ?
 
 ## **Success Criteria:**
 [Define what will make this project successful. Examples include meeting deadlines, delivering core functionality, or achieving performance benchmarks.]
@@ -42,21 +41,27 @@ Ideas:
   - Nothing "over-the-top", but efforts outside of class needed to deliver on a quality product
 - Users find product easy to use, happy with what the site does
 - Measure gain of users/wk (if it goes live)
-- Loading and searching data is relatively quick to todays standards
-? Need more here, add as you can ?
+- Loading and searching data is relatively quick compared to todays standards
 
 ## **Assumptions:**
 [List any assumptions about the technology, users, or resources that could impact development.]
-? Don't know what we should put here ?
-? Me either ?
+- Users will access the application primarily via web browser (desktop + mobile responsive).
+- Users want to create accounts to track macros, upload recipes, and interact with other users.
+- We’ll initially support text uploads for recipes (no video/image yet).
+- Traffic will be relatively low during MVP → scaling concerns can come later.
+- MongoDB will handle recipes, user data, and goals (flexible schema needed).
+
+Team is familiar with Python → Flask (or FastAPI) is the chosen backend framework.
 
 ## **Risks:**
 [Identify potential risks and challenges, such as technical limitations, resource constraints, or dependency issues.]
 - An obvious time limit of the semester's end
 - Limited knowledge of tools we would like to use
   - Need to make an effort to learn about tools necessary to make the product succeed
-- TBD
-? Add as you can ?
+- Learning curve for Flask/MongoDB integration.
+- Handling file uploads (storage, size limits, compression).
+- Authentication/authorization (security vulnerabilities if poorly implemented).
+- MongoDB schema design could get messy without careful planning.
 
 ## **Design / Architectural Review:**
 [Outline the initial thoughts on application architecture. Will it be monolithic or microservices? Will it use a database? What major components will be included?]
@@ -90,13 +95,14 @@ Communication will take place over iMessage, meetings ideally 2x/wk. Ask teammat
 ## **Application Stack:**
 [List all the technologies being used in the project, including programming languages, frameworks, and tools.]
 - Backend: Python/Flask
-- Frontend: ? HTML/CSS? Should probably get some ideas for this ?
+- Frontend: HTML/CSS, JS
 - DB: NoSQL - MongoDB
 - Server: ? Necessary for our project? Not sure. ?
 
 ### **Libraries/Frameworks:**
 [List any specific libraries or frameworks your application will use, such as React, Flask, Django, etc.]
 - Flask
-- ? Anything else? ?
+- ? Anything else ?
+
 
 
