@@ -91,7 +91,7 @@ Team is familiar with Python → Flask (or FastAPI) is the chosen backend framew
 
 ## **Team Norms:**
 [Establish how the team will communicate, how often meetings will happen, and any other ground rules for collaboration.]
-Communication will take place over iMessage, meetings ideally 2x/wk. Ask teammates for help on something you're unsure about.
+- Communication will take place over iMessage, meetings ideally 2x/wk. Ask teammates for help on something you're unsure about.
 
 ## **Application Stack:**
 [List all the technologies being used in the project, including programming languages, frameworks, and tools.]
@@ -104,6 +104,7 @@ Communication will take place over iMessage, meetings ideally 2x/wk. Ask teammat
 [List any specific libraries or frameworks your application will use, such as React, Flask, Django, etc.]
 - Flask
 - ? Anything else ?
+
 
 
 
