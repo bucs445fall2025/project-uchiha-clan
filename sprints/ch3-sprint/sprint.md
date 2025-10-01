@@ -22,32 +22,40 @@
     - Increases a blog post's popularity, based on how many people have made it
 Ideas:
 - Report System?
-- Calorie/Macro Tracker?
+    - Might be feature creep (let's assume for now users have good intentions)
+    - Devs able to review peoples recipes to verify not spam/botting
+- Calorie/Macro Tracker
+    - Users able to track their daily macros, by inserting what they have eaten into the web application
+    - May have to manual insert macros of meal (depending on our database of foods)
 
 ## **Deliverables:**
 [List what will be delivered by the end of the project, such as a working MVP (Minimum Viable Product), specific features, documentation, etc.]
 - Working Product:
   - Site where a user can complete the Blog, Search, and Public Interaction portions listed in the scope
-  - Clean, aesthetic, neat site with smoth UI interactions
+  - Clean, aesthetic, neat site with smooth UI interactions
+  - User can easily/efficiently track Calories/macros throughout their day
 ? Probably need to add more here, unsure of what else is needed. ?
 
 ## **Success Criteria:**
 [Define what will make this project successful. Examples include meeting deadlines, delivering core functionality, or achieving performance benchmarks.]
 - Dedication to work outside of class-time
   - Nothing "over-the-top", but efforts outside of class needed to deliver on a quality product
-- 
+- Users find product easy to use, happy with what the site does
+- Measure gain of users/wk (if it goes live)
+- Loading and searching data is relatively quick to todays standards
 ? Need more here, add as you can ?
 
 ## **Assumptions:**
 [List any assumptions about the technology, users, or resources that could impact development.]
 ? Don't know what we should put here ?
+? Me either ?
 
 ## **Risks:**
 [Identify potential risks and challenges, such as technical limitations, resource constraints, or dependency issues.]
 - An obvious time limit of the semester's end
 - Limited knowledge of tools we would like to use
   - Need to make an effort to learn about tools necessary to make the product succeed
-- 
+- TBD
 ? Add as you can ?
 
 ## **Design / Architectural Review:**
@@ -56,7 +64,8 @@ Ideas:
 
 ## **Test Environment:**
 [Define how the application will be tested. Will you use automated tests? What environment will the tests run in?]
-? Not 100% sure, but will consist of having the test go live, making posts, and seeing what gets represented in our database ?
+Will consist of having the test go live, making posts, and seeing what gets represented in our database
+
 
 ---
 
@@ -71,11 +80,12 @@ Ideas:
 ## **Team Roles:**
 [Define roles for each team member, such as developer, designer, project manager, QA tester, etc.]
 - Derek:
-- Jackson:
+- Jackson: developer/QA tester
 - Jack: ? I can take UI/UX lead, with background knowledge with HTML/CSS, might want to try using tailwind for this. We should talk about this more later. ? 
 
 ## **Team Norms:**
 [Establish how the team will communicate, how often meetings will happen, and any other ground rules for collaboration.]
+Communication will take place over iMessage, meetings ideally 2x/wk. Ask teammates for help on something you're unsure about.
 
 ## **Application Stack:**
 [List all the technologies being used in the project, including programming languages, frameworks, and tools.]
@@ -88,4 +98,5 @@ Ideas:
 [List any specific libraries or frameworks your application will use, such as React, Flask, Django, etc.]
 - Flask
 - ? Anything else? ?
+
 
