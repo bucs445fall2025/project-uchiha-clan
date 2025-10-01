@@ -86,7 +86,7 @@ Team is familiar with Python → Flask (or FastAPI) is the chosen backend framew
 ## **Team Roles:**
 [Define roles for each team member, such as developer, designer, project manager, QA tester, etc.]
 - Derek:
-- Jackson: developer/QA tester
+- Jackson: Backend Developer, QA tester
 - Jack: Developer, UI/UX Lead
 
 ## **Team Norms:**
@@ -104,6 +104,7 @@ Team is familiar with Python → Flask (or FastAPI) is the chosen backend framew
 [List any specific libraries or frameworks your application will use, such as React, Flask, Django, etc.]
 - Flask
 - ? Anything else ?
+
 
 
 
