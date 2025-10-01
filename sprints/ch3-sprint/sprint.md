@@ -65,11 +65,12 @@ Team is familiar with Python → Flask (or FastAPI) is the chosen backend framew
 
 ## **Design / Architectural Review:**
 [Outline the initial thoughts on application architecture. Will it be monolithic or microservices? Will it use a database? What major components will be included?]
-? No clue what to put here ? ? Yes it will use a database ? ? Seems like it will be more or less monolithic ?
+- Monolithic: One service working with one database that services many people.
+- Database: MongoDB 
 
 ## **Test Environment:**
 [Define how the application will be tested. Will you use automated tests? What environment will the tests run in?]
-Will consist of having the test go live, making posts, and seeing what gets represented in our database
+- Will consist of having the test go live, making posts, and seeing what gets represented in our database
 
 
 ---
@@ -86,7 +87,7 @@ Will consist of having the test go live, making posts, and seeing what gets repr
 [Define roles for each team member, such as developer, designer, project manager, QA tester, etc.]
 - Derek:
 - Jackson: developer/QA tester
-- Jack: ? I can take UI/UX lead, with background knowledge with HTML/CSS, might want to try using tailwind for this. We should talk about this more later. ? 
+- Jack: Developer, UI/UX Lead
 
 ## **Team Norms:**
 [Establish how the team will communicate, how often meetings will happen, and any other ground rules for collaboration.]
@@ -97,12 +98,13 @@ Communication will take place over iMessage, meetings ideally 2x/wk. Ask teammat
 - Backend: Python/Flask
 - Frontend: HTML/CSS, JS
 - DB: NoSQL - MongoDB
-- Server: ? Necessary for our project? Not sure. ?
+- Server: Nginx
 
 ### **Libraries/Frameworks:**
 [List any specific libraries or frameworks your application will use, such as React, Flask, Django, etc.]
 - Flask
 - ? Anything else ?
+
 
 
 
