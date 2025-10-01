@@ -1,6 +1,5 @@
 ## **Backend**
 - **Python (Alpine)** → [python:3.12-alpine](https://hub.docker.com/_/python)
-? We plan to use Py, but do we keep this version ?
 
 ? Need to decide if we are using a web server. Nginx might be best if we go with a server ?
 ## **Web Server**
