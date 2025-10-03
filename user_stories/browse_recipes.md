@@ -11,6 +11,8 @@ As a user, I want to be able to browse/search for recipes on the website.
 - [How will we know when this is done?]
     - user is easily able to browse and find desired recipes
 - [What must be functional before release?]
+    - a storage system to retain post data
+    - a way to present the post data onto the webpage
     - a way to browse and filter recipes based on what the user is looking for
 
 ---
