@@ -1,7 +1,7 @@
 # Browse Recipes
 
 ## **User Story**
-As a user, I want to be able to browse/search for recipes on the website.
+As a user, I want to be able to browse/search for recipes on the website so that I can quickly find a recipe to make.
 
 ---
 
