@@ -54,7 +54,7 @@ Way to set your daily dietary/Macro goals
 
 ### User Stories
 
-Food Blogger
+Food Blogger, 
 Gym Rat
 
 ### Planning
