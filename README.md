@@ -1,9 +1,11 @@
-# << Project Title >>
+# << Project Name >>
 ## CS 445 Final Project
-### << Semester, Year >>
+### Fall 2025
 
-### Team: << team name >>
-<< List Team Members >>
+### Team: Uchiha Clan
+Jackson Carey
+Derek Li
+Jack Sutera
 
 ## Getting Started
 <<One paragraph of project description goes here>>
@@ -18,7 +20,7 @@ A list of features, function or non-functional, you would like to add in the fut
   >>
   
 ## SRS
-[[document](https://docs.google.com/document/d/1vp6U_T2O5XnSDwcmeQRHlv02YtWfmNAtFRZirpYPtFM/edit?tab=t.0)](url to google doc)
+[[Our SRS](https://docs.google.com/document/d/1vp6U_T2O5XnSDwcmeQRHlv02YtWfmNAtFRZirpYPtFM/edit?tab=t.0)](url to google doc)
   
 ### Prerequisites
 * [Docker](https://www.docker.com/)
