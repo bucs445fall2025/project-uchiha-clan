@@ -17,8 +17,15 @@ if posts.count_documents({}) == 0:
     posts.insert_one(test)
 
 # routing
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def index(): 
+    if request.method == "POST":
+        title = request.form.get("title")
+        content = request.form.get("content")
+        if title and content:
+            posts.insert_one({"title": title, "content": content})
+        return redirect("/")
+    
     postlist = list(posts.find())
     return render_template("index.html", posts=postlist)
 
