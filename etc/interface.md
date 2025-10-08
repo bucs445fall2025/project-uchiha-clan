@@ -1,5 +1,13 @@
-classOne
+UserProfile
+  create() - create account
+  update_username/email/phone#() - update profile, email, phone #, respectively
 
-classTwo
+Form
+  addPost() - user uploads info from recipe into database
+  search() - user can search recipes
+  filter() - user can filter recipes depending on macros
 
-classThree
+Post
+  str name - name of post
+  description - description of post
+  recipe - steps
