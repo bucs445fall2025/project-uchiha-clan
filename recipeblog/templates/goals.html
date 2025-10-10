@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Goals</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #f3f3f3;
+        }
+        .back-btn {
+            background-color: #555;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .back-btn:hover {
+            background-color: #333;
+        }
+        .goal-form {
+            margin: 20px;
+        }
+        .goal-item {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <h1>Goals</h1>
+        <a href="/" class="back-btn">Back</a>
+    </div>
+
+    <div class="goal-form">
+        <h2>Set a New Goal</h2>
+        <form method="POST">
+            <input type="text" name="goal" placeholder="Enter your goal" required>
+            <button type="submit">Add Goal</button>
+        </form>
+
+        <h2>Current Goals</h2>
+        <ul>
+            {% for g in goals %}
+            <li class="goal-item">{{ g['goal'] }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

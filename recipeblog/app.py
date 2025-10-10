@@ -29,6 +29,19 @@ def index():
     postlist = list(posts.find())
     return render_template("index.html", posts=postlist)
 
+
+@app.route("/goals", methods=["GET", "POST"])
+def goals():
+    if request.method == "POST":
+        goal_text = request.form.get("goal")
+        if goal_text:
+            db.goals.insert_one({"goal": goal_text})
+        return redirect("/goals")
+
+    goals_list = list(db.goals.find())
+    return render_template("goals.html", goals=goals_list)
+
+
 # start flask server
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
