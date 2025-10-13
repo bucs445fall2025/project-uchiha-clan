@@ -2,7 +2,7 @@
 
 *note: replace anything surrounded by << >> and **remove** the << >>*
 
-**Attended**: Jack, Jackson, Derek
+**Attended**: Jack, Jackson
 
 **DATE**: 10/13/25
 
@@ -66,7 +66,6 @@ Food_Blogger
 
 Jack: Continue working on form functionality, creating more fields to describe a recipe. Look into how we might be able to use recipe posts  
 to add macro data to a running daily total for the goals page.  
-Derek:  
 Jackson:  
 
 All: Complete the presentation to be presented on Wednesday. Add requirements to the SRS (Need >= 10)
