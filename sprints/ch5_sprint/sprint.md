@@ -72,7 +72,7 @@ All: Complete the presentation to be presented on Wednesday. Add requirements to
 
 ### Action Items
 
-Add functionality to the recipe form.
+Add functionality to the recipe form.  
 Add functionality to the goal form.
 
 ### Issues and Risks
