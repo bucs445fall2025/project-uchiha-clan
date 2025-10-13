@@ -80,6 +80,6 @@ We have our presentation on Wednesday, which could hinder immediate work on the 
 
 ### Team Work Assignments
 
-Jack: Work on recipe form
-Jackson:
-Derek:
+Jack: Work on recipe form  
+Jackson:  
+Derek:  
