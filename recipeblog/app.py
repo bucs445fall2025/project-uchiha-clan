@@ -18,15 +18,33 @@ if posts.count_documents({}) == 0:
 
 # routing
 @app.route("/", methods=["GET", "POST"])
-def index(): 
+def index():
     if request.method == "POST":
         title = request.form.get("title")
+        cuisine = request.form.get("cuisine")
+        ingredients = request.form.get("ingredients")
+        cals = request.form.get("cals")
+        protein = request.form.get("protein")
+        carbs = request.form.get("carbs")
+        fats = request.form.get("fats")
         content = request.form.get("content")
+
         if title and content:
-            posts.insert_one({"title": title, "content": content})
+            post_data = {
+                "title": title,
+                "cuisine": cuisine,
+                "ingredients": ingredients,
+                "cals": cals,
+                "protein": protein,
+                "carbs": carbs,
+                "fats": fats,
+                "content": content,
+            }
+            posts.insert_one(post_data)
+
         return redirect("/")
-    
-    postlist = list(posts.find())
+
+    postlist = list(posts.find().sort("_id", -1))
     return render_template("index.html", posts=postlist)
 
 

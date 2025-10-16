@@ -27,6 +27,111 @@
         .goals-btn:hover {
             background-color: #45a049;
         }
+
+        .form-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            width: 400px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-top: 1rem;
+            font-weight: bold;
+            color: #444;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 0.5rem;
+            margin-top: 0.4rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            margin-top: 1.5rem;
+            padding: 0.75rem;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        h2 {
+        text-align: center;
+        color: #333;
+        margin-top: 3rem;
+        font-size: 1.8rem;
+        }
+
+        .post-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        padding: 2rem;
+        }
+
+        .post-card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .post-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+
+        .post-title {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.4rem;
+        color: #2b6cb0;
+        }
+
+        .post-cuisine, .post-ingredients, .post-content {
+        margin: 0.5rem 0;
+        line-height: 1.4;
+        color: #555;
+        }
+
+        .post-macros {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+        }
+
+        .post-macros span {
+        background: #f0f0f0;
+        padding: 0.3rem 0.6rem;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -35,21 +140,46 @@
         <!-- 🔹 This is the new Goals button -->
         <a href="/goals" class="goals-btn">Goals</a>
     </div>
-
+<div class="form-container">
 <h1>Post</h1>
+    
     <form method="POST">
-        <input type="text" name="title" ><br>
-        <textarea name="content" > </textarea><br>
+        <label>Title</label><input type="text" name="title" placeholder="Ex: Grandma's Chocolate Chip Cookies"><br>
+        <label>Cusine</label><input type="text" name="cusine" placeholder="Ex: Italian, Greek"><br>
+        <label>Ingredients</label><input type="text" name="ingredients" placeholder="Ex: Chicken breast, brown rice, paprika, vegetable oil"><br>
+        <label>Macros</label>
+        <input type="number" name="cals" placeholder="Calories">
+        <input type="number" name="protein" placeholder="Protein (g)">
+        <input type="number" name="carbs" placeholder="Carbohydrates (g)">
+        <input type="number" name="fats" placeholder="Fats (g)">
+        <label>Instructions</label><textarea name="content" > </textarea><br>
         <button type="submit">Submit form</button>
     </form>
+    </div>
 
-<h2>List</h2>
-    <ul>
-<!-- format comes from jinja, automatically imported using flask -->
-        {% for post in posts %}
-        <li>{{post['title']}} {{post['content']}}</li>
-        {% endfor %}
-    </ul>
+<h2>Recipes</h2>
+<div class="post-list">
+  {% for post in posts %}
+    <div class="post-card">
+      <h3 class="post-title">{{ post['title'] }}</h3>
+      {% if post['cuisine'] %}
+        <p class="post-cuisine"><strong>Cuisine:</strong> {{ post['cuisine'] }}</p>
+      {% endif %}
+      {% if post['ingredients'] %}
+        <p class="post-ingredients"><strong>Ingredients:</strong> {{ post['ingredients'] }}</p>
+      {% endif %}
+      <div class="post-macros">
+        {% if post['cals'] %}<span>{{ post['cals'] }} cal</span>{% endif %}
+        {% if post['protein'] %}<span>{{ post['protein'] }}g protein</span>{% endif %}
+        {% if post['carbs'] %}<span>{{ post['carbs'] }}g carbs</span>{% endif %}
+        {% if post['fats'] %}<span>{{ post['fats'] }}g fats</span>{% endif %}
+      </div>
+      {% if post['content'] %}
+        <p class="post-content">{{ post['content'] }}</p>
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>
 
 </body>
 </html>
