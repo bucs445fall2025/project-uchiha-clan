@@ -51,13 +51,46 @@ def index():
 @app.route("/goals", methods=["GET", "POST"])
 def goals():
     if request.method == "POST":
-        goal_text = request.form.get("goal")
-        if goal_text:
-            db.goals.insert_one({"goal": goal_text})
+        if "reset" in request.form:
+            db.goals.delete_many({})
+            return redirect("/goals")
+
+        title = request.form.get("title")
+        calories = float(request.form.get("calories") or 0)
+        protein = float(request.form.get("protein") or 0)
+        carbs = float(request.form.get("carbs") or 0)
+        fats = float(request.form.get("fats") or 0)
+
+        if title:
+            db.goals.insert_one({
+                "title": title,
+                "calories": calories,
+                "protein": protein,
+                "carbs": carbs,
+                "fats": fats,
+                "progress": { "calories": 0, "protein": 0, "carbs": 0, "fats": 0 }
+            })
         return redirect("/goals")
 
     goals_list = list(db.goals.find())
+
+    # Ensure backward compatibility with older goal entries
+    for g in goals_list:
+        if "progress" not in g:
+            g["progress"] = {"calories": 0, "protein": 0, "carbs": 0, "fats": 0}
+        # Also ensure macro fields exist
+        for macro in ["calories", "protein", "carbs", "fats"]:
+            if macro not in g:
+                g[macro] = 0
+
     return render_template("goals.html", goals=goals_list)
+
+from bson.objectid import ObjectId
+
+@app.route("/delete_goal/<goal_id>", methods=["POST"])
+def delete_goal(goal_id):
+    db.goals.delete_one({"_id": ObjectId(goal_id)})
+    return redirect("/goals")
 
 
 # start flask server
