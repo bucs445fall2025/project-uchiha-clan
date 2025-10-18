@@ -67,6 +67,7 @@ Food_Blogger
 Jack: Continue working on form functionality, creating more fields to describe a recipe. Look into how we might be able to use recipe posts  
 to add macro data to a running daily total for the goals page.  
 Jackson:  Continue to work on the Goals functionality (delete, edit, name goals (diet)). Create more fields for goals page (and track those goals once we can "consume" a meal on the application.
+Derek: Implement a server through nginx.
 
 All: Complete the presentation to be presented on Wednesday. Add requirements to the SRS (Need >= 10)
 
