@@ -17,7 +17,7 @@ services:
   
   nginx:
     image: nginx:latest
-    containter_name: nginx
+    container_name: nginx
     ports:
       - "80:80"
     volumes:
