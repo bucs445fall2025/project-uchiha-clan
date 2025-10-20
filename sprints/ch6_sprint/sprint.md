@@ -80,3 +80,5 @@ SRS Requirements
 
 Jack: Implement Button Feature  
 Jackson: Implement pop-out feature for recipes
+Derek: Help implement pop-out feature
+Everybody: Work on SRS requirements
