@@ -78,4 +78,5 @@ SRS Requirements
 
 ### Team Work Assignments
 
-Jack: Implement Button Feature
+Jack: Implement Button Feature  
+Jackson: Implement pop-out feature for recipes
