@@ -68,9 +68,9 @@ on this pop-out that allows a user to add that recipe's macros to a goal they ha
 
 ### Action Items
 
-Implement pop-out feature
-Implement button feature
-SRS Requirements
+Implement pop-out feature  
+Implement button feature  
+SRS Requirements  
 
 ### Issues and Risks
 
