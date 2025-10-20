@@ -54,7 +54,7 @@ N/A
 ### Requirement Target
 
 Have a way to track goals  
-Have a way to find/search for recipes  
+Keeping the site neat and visually pleasing
 
 ### User Stories
 
