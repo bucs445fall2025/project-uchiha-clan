@@ -1,6 +1,6 @@
 # python app using flask and pymongo
 
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, jsonify
 from pymongo import MongoClient
 import os
 
@@ -91,6 +91,35 @@ from bson.objectid import ObjectId
 def delete_goal(goal_id):
     db.goals.delete_one({"_id": ObjectId(goal_id)})
     return redirect("/goals")
+
+
+@app.route("/add_to_goals", methods=["POST"])
+def add_to_goals():
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No data received"}), 400
+
+    # Extract macro values from the recipe
+    added_cals = float(data.get("cals", 0))
+    added_protein = float(data.get("protein", 0))
+    added_carbs = float(data.get("carbs", 0))
+    added_fats = float(data.get("fats", 0))
+
+    # Update all current goals' progress fields
+    goals = db.goals.find()
+    for g in goals:
+        progress = g.get("progress", {"calories": 0, "protein": 0, "carbs": 0, "fats": 0})
+        progress["calories"] += added_cals
+        progress["protein"] += added_protein
+        progress["carbs"] += added_carbs
+        progress["fats"] += added_fats
+
+        db.goals.update_one(
+            {"_id": g["_id"]},
+            {"$set": {"progress": progress}}
+        )
+
+    return jsonify({"message": "Recipe added to goals successfully!"}), 200
 
 
 # start flask server

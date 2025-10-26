@@ -190,6 +190,7 @@
     <p id="modal-ingredients"></p>
     <div id="modal-macros"></div>
     <p id="modal-content"></p>
+    <button id="addToGoalsBtn" class="add-to-goals-btn">Add to Goals</button>
   </div>
 </div>
 
@@ -210,27 +211,55 @@
     }
   };
 
-  // Attach click listeners to all recipe cards
-  document.querySelectorAll(".post-card").forEach(card => {
-    card.addEventListener("click", () => {
-      // Extract data from card
-      const title = card.querySelector(".post-title")?.innerText || "";
-      const cuisine = card.querySelector(".post-cuisine")?.innerText || "";
-      const ingredients = card.querySelector(".post-ingredients")?.innerText || "";
-      const macros = card.querySelector(".post-macros")?.innerText || "";
-      const content = card.querySelector(".post-content")?.innerText || "";
+const addToGoalsBtn = document.getElementById("addToGoalsBtn");
 
-      // Populate modal
-      document.getElementById("modal-title").innerText = title;
-      document.getElementById("modal-cuisine").innerText = cuisine;
-      document.getElementById("modal-ingredients").innerText = ingredients;
-      document.getElementById("modal-macros").innerText = macros;
-      document.getElementById("modal-content").innerText = content;
+let currentRecipe = {};
 
-      // Show modal
-      modal.style.display = "block";
-    });
+document.querySelectorAll(".post-card").forEach(card => {
+  card.addEventListener("click", () => {
+    const title = card.querySelector(".post-title")?.innerText || "";
+    const cuisine = card.querySelector(".post-cuisine")?.innerText || "";
+    const ingredients = card.querySelector(".post-ingredients")?.innerText || "";
+    const macrosDiv = card.querySelector(".post-macros");
+    const content = card.querySelector(".post-content")?.innerText || "";
+
+    // Model the macro retrieval off of the code above
+    const cals = parseFloat(macrosDiv?.querySelector("span:nth-child(1)")?.innerText) || 0;
+    const protein = parseFloat(macrosDiv?.querySelector("span:nth-child(2)")?.innerText) || 0;
+    const carbs = parseFloat(macrosDiv?.querySelector("span:nth-child(3)")?.innerText) || 0;
+    const fats = parseFloat(macrosDiv?.querySelector("span:nth-child(4)")?.innerText) || 0;
+
+    currentRecipe = { title, cuisine, ingredients, cals, protein, carbs, fats, content };
+
+    document.getElementById("modal-title").innerText = title;
+    document.getElementById("modal-cuisine").innerText = cuisine;
+    document.getElementById("modal-ingredients").innerText = ingredients;
+    document.getElementById("modal-macros").innerText = `${cals} cal | ${protein}g protein | ${carbs}g carbs | ${fats}g fats`;
+    document.getElementById("modal-content").innerText = content;
+
+    modal.style.display = "block";
   });
+});
+
+//JSONify the 'currentrecpie' to send to the goals thru POST request
+addToGoalsBtn.addEventListener("click", () => {
+  fetch("/add_to_goals", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(currentRecipe)
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert(data.message || "Added to goals!");
+    modal.style.display = "none";
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Error adding to goals.");
+  });
+});
 </script>
 
 <style>
@@ -275,6 +304,21 @@
   .post-card {
     cursor: pointer;
   }
+
+  .add-to-goals-btn {
+  margin-top: 1rem;
+  background-color: #2b6cb0;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+.add-to-goals-btn:hover {
+  background-color: #1e4e91;
+}
 </style>
 
 
