@@ -79,5 +79,5 @@ SRS Requirements
 ### Team Work Assignments
 
 Jack: Organize codebase, tidy up styling  
-Derek:  
+Derek: Implement search feature
 Jackson:  
