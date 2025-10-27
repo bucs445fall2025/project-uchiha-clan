@@ -2,17 +2,18 @@
 
 *note: replace anything surrounded by << >> and **remove** the << >>*
 
-**Attended**: << record the team members in attendance (virtual counts as long as they are participating) >>
+**Attended**: Jack, Jackson, Derek  
 
-**DATE**: << meeting date >>
+**DATE**: 10/27/25
 
 ***
 
-## Sprint << num >> Review
+## Sprint 6 Review
 
 ### SRS Sections Updated
 
-<< List any SRS sections that were updated in the last sprint >>
+User Interface  
+Requirements (Functional)  
 
 ### User Story
 
@@ -20,23 +21,26 @@
 
 ### Sprint Requirements Attempted
 
-<< The corresponding SRS requirement that the team completed in the last sprint >>
+Have a way to track goals  
+Keeping the site neat and visually pleasing  
 
 ### Completed Requirements
 
-<< The work that's been completed in this sprint >>
+Have a way to track goals  
+Keeping the site neat and visually pleasing  
 
 ### Incomplete Requirements
 
-<< The work that has not been completed in this sprint. Be VERY detailed and specific regarding what isn't working and what needs to be completed >>
+
 
 ### The summary of the entire project
 
-<< A general overview of the entire project >>
+We now have a pop-out feature for our recipes alongside a button to transfer recipe macros to goal progress. A user can submit recipes,  
+set goals, reset goals, and view progress of their goals.  
 
 ***
 
-## Sprint << num >> Planning
+## Sprint 7 Planning
 
 ## Requirements Flex
 
@@ -44,23 +48,29 @@
 
 ## Technical Debt
 
-<< Any requirements from the previous sprint that are using a technical flex >>
+N/A
 
 ### Requirement Target
 
-<< The corresponding SRS requirement that our team will be complete in next sprint >>
+Have a way to find/search for recipes  
+Keeping our codebase neat and readable  
 
 ### User Stories
 
-<< Corresponding User Stories >>
+Gym Rat  
+Food Critic  
 
 ### Planning
 
-<< Our team's detailed plan to complete the sprint >>
+We will implement the new search and filter features, that should work with each other to sort and search for recipes. We will also work on  
+organizing our codebase, along with completeing the SRS requirements.
 
 ### Action Items
 
-<< A list of things that need to happen in our for our team to complete the sprint >>
+Implement search feature  
+Implement filter feature  
+Organize our codebase  
+SRS Requirements
 
 ### Issues and Risks
 
@@ -68,4 +78,6 @@
 
 ### Team Work Assignments
 
-<< A list of each team member and their works assignments for this sprint >>
+Jack: Organize codebase, tidy up styling  
+Derek:  
+Jackson:  
