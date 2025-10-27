@@ -2,12 +2,15 @@
 
 ## SRS Section(s)Updated
 
+- Interfaces
 
 ## Requirements Attempted in this Sprint
 
+- Track Goals
 
 ## Requirements complete
 
+- Track Goals
 
 ## Requirements incomplete
 
@@ -18,9 +21,11 @@
 
 ## Requirements Attempted in next Sprint
 
+- Search and Filter Recipes
 
 ## Milestone Status
 
+- Pass
 
 ## Requested Changes
 
