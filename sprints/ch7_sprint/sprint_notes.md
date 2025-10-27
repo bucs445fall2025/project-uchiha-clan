@@ -80,4 +80,4 @@ SRS Requirements
 
 Jack: Organize codebase, tidy up styling  
 Derek: Implement search feature
-Jackson:  
+Jackson:  Implement filtering feature (ex: specific range of macros, specific diet type), add tags (vegetarian, vegan, gluten-free, etc.) field to recipe posts.
