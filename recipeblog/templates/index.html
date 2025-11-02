@@ -172,6 +172,36 @@
     </form>
     </div>
 
+<!-- Filter Form -->
+<div class="filter-container">
+  <h2>Filter Recipes</h2>
+  <form method="GET" action="/">
+    <div class="filter-row">
+      <label>Calories:</label>
+      <input type="number" name="min_cals" placeholder="Min">
+      <input type="number" name="max_cals" placeholder="Max">
+    </div>
+    <div class="filter-row">
+      <label>Protein (g):</label>
+      <input type="number" name="min_protein" placeholder="Min">
+      <input type="number" name="max_protein" placeholder="Max">
+    </div>
+    <div class="filter-row">
+      <label>Carbs (g):</label>
+      <input type="number" name="min_carbs" placeholder="Min">
+      <input type="number" name="max_carbs" placeholder="Max">
+    </div>
+    <div class="filter-row">
+      <label>Fats (g):</label>
+      <input type="number" name="min_fats" placeholder="Min">
+      <input type="number" name="max_fats" placeholder="Max">
+    </div>
+    <button type="submit">Apply Filters</button>
+  </form>
+</div>
+
+
+
 <h2>Recipes</h2>
 <div class="post-list">
   {% for post in posts %}

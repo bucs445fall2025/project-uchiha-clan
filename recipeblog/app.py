@@ -19,30 +19,44 @@ if posts.count_documents({}) == 0:
 # routing
 @app.route("/", methods=["GET", "POST"])
 def index():
-    if request.method == "POST":
-        title = request.form.get("title")
-        cuisine = request.form.get("cuisine")
-        ingredients = request.form.get("ingredients")
-        cals = request.form.get("cals")
-        protein = request.form.get("protein")
-        carbs = request.form.get("carbs")
-        fats = request.form.get("fats")
-        content = request.form.get("content")
+    # Grab filter params
+    min_cals = request.args.get("min_cals")
+    max_cals = request.args.get("max_cals")
+    min_protein = request.args.get("min_protein")
+    max_protein = request.args.get("max_protein")
+    min_carbs = request.args.get("min_carbs")
+    max_carbs = request.args.get("max_carbs")
+    min_fats = request.args.get("min_fats")
+    max_fats = request.args.get("max_fats")
 
-        if title and content:
-            post_data = {
-                "title": title,
-                "cuisine": cuisine,
-                "ingredients": ingredients,
-                "cals": cals,
-                "protein": protein,
-                "carbs": carbs,
-                "fats": fats,
-                "content": content,
+    query = {}
+    filters = {
+        "cals": (min_cals, max_cals),
+        "protein": (min_protein, max_protein),
+        "carbs": (min_carbs, max_carbs),
+        "fats": (min_fats, max_fats)
+    }
+
+    # Build numeric range filters (convert stored strings to numbers safely)
+    for field, (min_val, max_val) in filters.items():
+        cond = {}
+        if min_val:
+            cond["$gte"] = float(min_val)
+        if max_val:
+            cond["$lte"] = float(max_val)
+        if cond:
+            # Use $expr to convert field strings to numbers during comparison
+            query["$expr"] = {
+                "$and": [
+                    {"$gte": [{"$toDouble": f"${field}"}, cond.get("$gte", float("-inf"))]},
+                    {"$lte": [{"$toDouble": f"${field}"}, cond.get("$lte", float("inf"))]}
+                ]
             }
-            posts.insert_one(post_data)
 
-        return redirect("/")
+    posts_list = list(posts.find(query).sort("_id", -1))
+
+    return render_template("index.html", posts=posts_list)
+
     
 
     postlist = list(posts.find().sort("_id", -1))
@@ -136,6 +150,14 @@ def add_to_goals():
         )
 
     return jsonify({"message": "Recipe added to goals successfully!"}), 200
+
+@app.route("/debugdb")
+def debugdb():
+    posts_data = list(posts.find({}, {"title": 1, "cals": 1, "protein": 1, "carbs": 1, "fats": 1}))
+    for post in posts_data:
+        post["_id"] = str(post["_id"])  # Convert ObjectId to string for JSON
+    from flask import jsonify
+    return jsonify(posts_data)
 
 
 # start flask server
