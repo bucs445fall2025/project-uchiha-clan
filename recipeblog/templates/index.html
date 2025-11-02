@@ -140,6 +140,21 @@
         <!-- 🔹 This is the new Goals button -->
         <a href="/goals" class="goals-btn">Goals</a>
     </div>
+    
+<!-- Search Bar -->
+<div class="search-container">
+    <form method="GET" action="/search" class="search-form">
+      <input 
+        type="text" 
+        name="q" 
+        placeholder="Search recipes..." 
+        value="{{ query or '' }}" 
+        class="search-input"
+    />
+    <button type="submit" class="search-button">Search</button>
+  </form>
+</div>
+
 <div class="form-container">
 <h1>Post</h1>
     

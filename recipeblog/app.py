@@ -43,9 +43,25 @@ def index():
             posts.insert_one(post_data)
 
         return redirect("/")
+    
 
     postlist = list(posts.find().sort("_id", -1))
     return render_template("index.html", posts=postlist)
+
+@app.route("/search", methods=["GET"])
+def search():
+    search_query = request.args.get("q", "").strip()
+
+    # If user typed something, search by title only
+    if search_query:
+        results = list(posts.find(
+            {"title": {"$regex": search_query, "$options": "i"}}
+        ).sort("_id", -1))
+    else:
+        results = []
+
+    # Render the main page template with the filtered posts
+    return render_template("index.html", posts=results, query=search_query)
 
 
 @app.route("/goals", methods=["GET", "POST"])
