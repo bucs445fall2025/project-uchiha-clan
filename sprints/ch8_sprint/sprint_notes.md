@@ -75,5 +75,6 @@ Implement comment section
 
 ### Team Work Assignments
 
-Jack: Implement Tailwind
-Derek: Work on making search and filtering more powerful, combining functionality
+Jack: Implement Tailwind  
+Derek: Work on making search and filtering more powerful, combining functionality  
+Jackson: Implement comment feature into recipes so users can leave feedback  
