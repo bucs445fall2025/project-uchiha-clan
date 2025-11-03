@@ -75,4 +75,5 @@ Implement comment section
 
 ### Team Work Assignments
 
-Jack: Implement Tailwind  
+Jack: Implement Tailwind
+Derek: Work on making search and filtering more powerful, combining functionality
