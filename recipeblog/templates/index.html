@@ -137,7 +137,6 @@
 <body>
     <div class="top-bar">
         <h1>Recipe Blog</h1>
-        <!-- 🔹 This is the new Goals button -->
         <a href="/goals" class="goals-btn">Goals</a>
     </div>
     
@@ -226,7 +225,7 @@
   {% endfor %}
 </div>
 
-<!-- Modal container -->
+<!-- Modal  -->
 <div id="recipeModal" class="modal">
   <div class="modal-content">
     <span class="close-btn">&times;</span>
@@ -240,16 +239,13 @@
 </div>
 
 <script>
-  // Get modal elements
   const modal = document.getElementById("recipeModal");
   const closeBtn = document.querySelector(".close-btn");
 
-  // Close modal when X clicked
   closeBtn.onclick = () => {
     modal.style.display = "none";
   };
 
-  // Close modal if clicking outside content
   window.onclick = (event) => {
     if (event.target === modal) {
       modal.style.display = "none";
@@ -308,6 +304,7 @@ addToGoalsBtn.addEventListener("click", () => {
 </script>
 
 <style>
+  /* Keep modal stuff at the bottom, precedence */
   /* Modal backdrop */
   .modal {
     display: none;
@@ -330,7 +327,7 @@ addToGoalsBtn.addEventListener("click", () => {
     position: relative;
   }
 
-  /* Close button (X) */
+  /* Close button */
   .close-btn {
     position: absolute;
     top: 12px;
@@ -345,7 +342,6 @@ addToGoalsBtn.addEventListener("click", () => {
     color: #000;
   }
 
-  /* Optional: prevent cursor text-selection flicker */
   .post-card {
     cursor: pointer;
   }

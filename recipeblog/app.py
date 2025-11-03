@@ -2,11 +2,12 @@
 
 from flask import Flask, request, render_template, redirect, jsonify
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 import os
 
 app = Flask(__name__)
 
-# connect with MongoClient to default mongodb port (27017)
+# connect mongo
 connect = MongoClient("mongodb://mongodb:27017")
 db = connect["recipe_base"]
 posts = db["posts"]
@@ -16,7 +17,6 @@ if posts.count_documents({}) == 0:
     test = { "title":"TestPost1", "content":"TestContent1"}
     posts.insert_one(test)
 
-# routing
 @app.route("/", methods=["GET", "POST"])
 def index():
     # Grab filter params
@@ -59,8 +59,8 @@ def index():
 
     
 
-    postlist = list(posts.find().sort("_id", -1))
-    return render_template("index.html", posts=postlist)
+    #postlist = list(posts.find().sort("_id", -1))
+    #return render_template("index.html", posts=postlist)
 
 @app.route("/search", methods=["GET"])
 def search():
@@ -115,7 +115,7 @@ def goals():
 
     return render_template("goals.html", goals=goals_list)
 
-from bson.objectid import ObjectId
+
 
 @app.route("/delete_goal/<goal_id>", methods=["POST"])
 def delete_goal(goal_id):
@@ -160,6 +160,5 @@ def debugdb():
     return jsonify(posts_data)
 
 
-# start flask server
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
