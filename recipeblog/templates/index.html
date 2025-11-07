@@ -4,237 +4,124 @@
 
 <head>
     <title>Recipe Blog</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            background-color: #f3f3f3;
-        }
-        .goals-btn {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .goals-btn:hover {
-            background-color: #45a049;
-        }
-
-        .form-container {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            width: 400px;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            margin-top: 1rem;
-            font-weight: bold;
-            color: #444;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 0.5rem;
-            margin-top: 0.4rem;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 1rem;
-        }
-
-        textarea {
-            height: 100px;
-            resize: vertical;
-        }
-
-        button {
-            display: block;
-            width: 100%;
-            margin-top: 1.5rem;
-            padding: 0.75rem;
-            background-color: #4CAF50;
-            color: white;
-            font-size: 1rem;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        h2 {
-        text-align: center;
-        color: #333;
-        margin-top: 3rem;
-        font-size: 1.8rem;
-        }
-
-        .post-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 1.5rem;
-        padding: 2rem;
-        }
-
-        .post-card {
-        background: #fff;
-        border-radius: 12px;
-        padding: 1.5rem;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .post-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-        }
-
-        .post-title {
-        margin: 0 0 0.5rem 0;
-        font-size: 1.4rem;
-        color: #2b6cb0;
-        }
-
-        .post-cuisine, .post-ingredients, .post-content {
-        margin: 0.5rem 0;
-        line-height: 1.4;
-        color: #555;
-        }
-
-        .post-macros {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-top: 0.5rem;
-        }
-
-        .post-macros span {
-        background: #f0f0f0;
-        padding: 0.3rem 0.6rem;
-        border-radius: 6px;
-        font-size: 0.9rem;
-        }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="top-bar">
-        <h1>Recipe Blog</h1>
-        <a href="/goals" class="goals-btn">Goals</a>
+<body class="font-sans">
+    <div class="flex justify-between items-center p-2.5 bg-gray-100">
+        <h1 class="text-center text-gray-800 text-2xl">Recipe Blog</h1>
+        <a href="/goals" class="bg-green-500 text-white px-4 py-2 rounded no-underline hover:bg-green-600">Goals</a>
     </div>
     
 <!-- Search Bar -->
-<div class="search-container">
-    <form method="GET" action="/search" class="search-form">
+<div class="p-4">
+    <form method="GET" action="/search" class="flex gap-2">
       <input 
         type="text" 
         name="q" 
         placeholder="Search recipes..." 
         value="{{ query or '' }}" 
-        class="search-input"
+        class="flex-1 px-3 py-2 border border-gray-300 rounded"
     />
-    <button type="submit" class="search-button">Search</button>
+    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Search</button>
   </form>
 </div>
 
-<div class="form-container">
-<h1>Post</h1>
+<div class="bg-white p-8 rounded-xl shadow-md w-96 mx-auto my-5">
+<h1 class="text-center text-gray-800 mb-6 text-xl">Post</h1>
     
     <form method="POST">
-        <label>Title</label><input type="text" name="title" placeholder="Ex: Grandma's Chocolate Chip Cookies"><br>
-        <label>Cuisine</label><input type="text" name="cuisine" placeholder="Ex: Italian, Greek"><br>
-        <label>Ingredients</label><input type="text" name="ingredients" placeholder="Ex: Chicken breast, brown rice, paprika, vegetable oil"><br>
-        <label>Macros</label>
-        <input type="number" name="cals" placeholder="Calories">
-        <input type="number" name="protein" placeholder="Protein (g)">
-        <input type="number" name="carbs" placeholder="Carbohydrates (g)">
-        <input type="number" name="fats" placeholder="Fats (g)">
-        <label>Instructions</label><textarea name="content" > </textarea><br>
-        <button type="submit">Submit form</button>
+        <label class="block mt-4 font-bold text-gray-600">Title</label><input type="text" name="title" placeholder="Ex: Grandma's Chocolate Chip Cookies"
+        class="w-full p-2 mt-1.5 border border-gray-300 rounded text-base"><br>
+        <label>Cuisine</label><input type="text" name="cuisine" placeholder="Ex: Italian, Greek"
+        class="w-full p-2 mt-1.5 border border-gray-300 rounded text-base"><br>
+        <label>Ingredients</label><input type="text" name="ingredients" placeholder="Ex: Chicken breast, brown rice, paprika, vegetable oil"
+        class="w-full p-2 mt-1.5 border border-gray-300 rounded text-base"><br>
+        <label class="block mt-4 font-bold text-gray-600">Macros</label>
+        <input type="number" name="cals" placeholder="Calories"
+        class="w-full p-2 mt-1.5 border border-gray-300 rounded text-base">
+        <input type="number" name="protein" placeholder="Protein (g)"
+        class="w-full p-2 mt-1.5 border border-gray-300 rounded text-base">
+        <input type="number" name="carbs" placeholder="Carbohydrates (g)"
+        class="w-full p-2 mt-1.5 border border-gray-300 rounded text-base">
+        <input type="number" name="fats" placeholder="Fats (g)"
+        class="w-full p-2 mt-1.5 border border-gray-300 rounded text-base">
+        <label class="block mt-4 font-bold text-gray-600">Instructions</label><textarea name="content" class="w-full p-2 mt-1.5 border border-gray-300 rounded text-base h-24 resize-y"> </textarea><br>
+        <button type="submit" class="block w-full mt-6 p-3 bg-green-500 text-white text-base border-0 rounded cursor-pointer hover:bg-green-600">Submit form</button>
     </form>
     </div>
 
 <!-- Filter Form -->
-<div class="filter-container">
-  <h2>Filter Recipes</h2>
+<div class="bg-white p-6 rounded-xl shadow-md max-w-2xl mx-auto my-5">
+  <h2 class="text-center text-gray-800 mt-12 text-3xl mb-4">Filter Recipes</h2>
   <form method="GET" action="/">
-    <div class="filter-row">
-      <label>Calories:</label>
-      <input type="number" name="min_cals" placeholder="Min">
-      <input type="number" name="max_cals" placeholder="Max">
+    <div class="flex gap-2 items-center mb-3">
+      <label class="font-semibold w-32">Calories:</label>
+      <input type="number" name="min_cals" placeholder="Min"
+      class="flex-1 px-3 py-2 border border-gray-300 rounded">
+      <input type="number" name="max_cals" placeholder="Max"
+      class="flex-1 px-3 py-2 border border-gray-300 rounded">
     </div>
-    <div class="filter-row">
-      <label>Protein (g):</label>
-      <input type="number" name="min_protein" placeholder="Min">
-      <input type="number" name="max_protein" placeholder="Max">
+    <div class="flex gap-2 items-center mb-3">
+      <label class="font-semibold w-32">Protein (g):</label>
+      <input type="number" name="min_protein" placeholder="Min"
+      class="flex-1 px-3 py-2 border border-gray-300 rounded">
+      <input type="number" name="max_protein" placeholder="Max"
+      class="flex-1 px-3 py-2 border border-gray-300 rounded">
     </div>
-    <div class="filter-row">
-      <label>Carbs (g):</label>
-      <input type="number" name="min_carbs" placeholder="Min">
-      <input type="number" name="max_carbs" placeholder="Max">
+    <div class="flex gap-2 items-center mb-3">
+      <label class="font-semibold w-32">Carbs (g):</label>
+      <input type="number" name="min_carbs" placeholder="Min"
+      class="flex-1 px-3 py-2 border border-gray-300 rounded">
+      <input type="number" name="max_carbs" placeholder="Max"
+      class="flex-1 px-3 py-2 border border-gray-300 rounded">
     </div>
-    <div class="filter-row">
-      <label>Fats (g):</label>
-      <input type="number" name="min_fats" placeholder="Min">
-      <input type="number" name="max_fats" placeholder="Max">
+    <div class="flex gap-2 items-center mb-3">
+      <label class="font-semibold w-32">Fats (g):</label>
+      <input type="number" name="min_fats" placeholder="Min"
+      class="flex-1 px-3 py-2 border border-gray-300 rounded">
+      <input type="number" name="max_fats" placeholder="Max"
+      class="flex-1 px-3 py-2 border border-gray-300 rounded">
     </div>
-    <button type="submit">Apply Filters</button>
+    <button type="submit" class="w-full mt-4 p-3 bg-green-500 text-white rounded hover:bg-green-600">Apply Filters</button>
   </form>
 </div>
 
 
 
-<h2>Recipes</h2>
-<div class="post-list">
+<h2 class="text-center text-gray-800 mt-12 text-3xl">Recipes</h2>
+<div class="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6 p-8">
   {% for post in posts %}
-    <div class="post-card">
-      <h3 class="post-title">{{ post['title'] }}</h3>
+    <div class="bg-white rounded-xl p-6 shadow-md hover:-translate-y-1 hover:shadow-lg transition-all cursor-pointer">
+      <h3 class="m-0 mb-2 text-2xl text-blue-700">{{ post['title'] }}</h3>
       {% if post['cuisine'] %}
-        <p class="post-cuisine"><strong>Cuisine:</strong> {{ post['cuisine'] }}</p>
+        <p class="my-2 leading-6 text-gray-600"><strong>Cuisine:</strong> {{ post['cuisine'] }}</p>
       {% endif %}
       {% if post['ingredients'] %}
-        <p class="post-ingredients"><strong>Ingredients:</strong> {{ post['ingredients'] }}</p>
+        <p class="my-2 leading-6 text-gray-600"><strong>Ingredients:</strong> {{ post['ingredients'] }}</p>
       {% endif %}
-      <div class="post-macros">
-        {% if post['cals'] %}<span>{{ post['cals'] }} cal</span>{% endif %}
-        {% if post['protein'] %}<span>{{ post['protein'] }}g protein</span>{% endif %}
-        {% if post['carbs'] %}<span>{{ post['carbs'] }}g carbs</span>{% endif %}
-        {% if post['fats'] %}<span>{{ post['fats'] }}g fats</span>{% endif %}
+      <div class="flex flex-wrap gap-2 mt-2">
+        {% if post['cals'] %}<span class="bg-gray-100 px-2 py-1 rounded text-sm">{{ post['cals'] }} cal</span>{% endif %}
+        {% if post['protein'] %}<span class="bg-gray-100 px-2 py-1 rounded text-sm">{{ post['protein'] }}g protein</span>{% endif %}
+        {% if post['carbs'] %}<span class="bg-gray-100 px-2 py-1 rounded text-sm">{{ post['carbs'] }}g carbs</span>{% endif %}
+        {% if post['fats'] %}<span class="bg-gray-100 px-2 py-1 rounded text-sm">{{ post['fats'] }}g fats</span>{% endif %}
       </div>
       {% if post['content'] %}
-        <p class="post-content">{{ post['content'] }}</p>
+        <p class="my-2 leading-6 text-gray-600">{{ post['content'] }}</p>
       {% endif %}
     </div>
   {% endfor %}
 </div>
 
 <!-- Modal  -->
-<div id="recipeModal" class="modal">
-  <div class="modal-content">
-    <span class="close-btn">&times;</span>
-    <h3 id="modal-title"></h3>
-    <p id="modal-cuisine"></p>
-    <p id="modal-ingredients"></p>
-    <div id="modal-macros"></div>
-    <p id="modal-content"></p>
-    <button id="addToGoalsBtn" class="add-to-goals-btn">Add to Goals</button>
+<div id="recipeModal" class="hidden fixed z-[1000] left-0 top-0 w-full h-full bg-black/40">
+  <div class="bg-white my-[10%] mx-auto p-8 rounded-xl w-4/5 max-w-2xl shadow-lg relative">
+    <span class="close-btn absolute top-3 right-5 text-2xl font-bold text-gray-600 cursor-pointer hover:text-black">&times;</span>
+    <h3 id="modal-title" class="text-2xl mb-4"></h3>
+    <p id="modal-cuisine" class="mb-2"></p>
+    <p id="modal-ingredients" class="mb-2"></p>
+    <div id="modal-macros" class="mb-2"></div>
+    <p id="modal-content" class="mb-4"></p>
+    <button id="addToGoalsBtn" class="mt-4 bg-blue-700 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-800">Add to Goals</button>
   </div>
 </div>
 
@@ -243,12 +130,12 @@
   const closeBtn = document.querySelector(".close-btn");
 
   closeBtn.onclick = () => {
-    modal.style.display = "none";
+    modal.classList.add("hidden");
   };
 
   window.onclick = (event) => {
     if (event.target === modal) {
-      modal.style.display = "none";
+      modal.classList.add("hidden");
     }
   };
 
@@ -256,13 +143,13 @@ const addToGoalsBtn = document.getElementById("addToGoalsBtn");
 
 let currentRecipe = {};
 
-document.querySelectorAll(".post-card").forEach(card => {
+document.querySelectorAll(".bg-white.rounded-xl.p-6.shadow-md").forEach(card => {
   card.addEventListener("click", () => {
-    const title = card.querySelector(".post-title")?.innerText || "";
-    const cuisine = card.querySelector(".post-cuisine")?.innerText || "";
-    const ingredients = card.querySelector(".post-ingredients")?.innerText || "";
-    const macrosDiv = card.querySelector(".post-macros");
-    const content = card.querySelector(".post-content")?.innerText || "";
+    const title = card.querySelector("h3")?.innerText || "";
+    const cuisine = card.querySelector("p:nth-of-type(1)")?.innerText || "";
+    const ingredients = card.querySelector("p:nth-of-type(2)")?.innerText || "";
+    const macrosDiv = card.querySelector("div");
+    const content = card.querySelector("p:last-of-type")?.innerText || "";
 
     // Model the macro retrieval off of the code above
     const cals = parseFloat(macrosDiv?.querySelector("span:nth-child(1)")?.innerText) || 0;
@@ -278,7 +165,7 @@ document.querySelectorAll(".post-card").forEach(card => {
     document.getElementById("modal-macros").innerText = `${cals} cal | ${protein}g protein | ${carbs}g carbs | ${fats}g fats`;
     document.getElementById("modal-content").innerText = content;
 
-    modal.style.display = "block";
+    modal.classList.remove("hidden");
   });
 });
 
@@ -294,7 +181,7 @@ addToGoalsBtn.addEventListener("click", () => {
   .then(res => res.json())
   .then(data => {
     alert(data.message || "Added to goals!");
-    modal.style.display = "none";
+    modal.classList.add("hidden");
   })
   .catch(err => {
     console.error(err);
@@ -302,65 +189,6 @@ addToGoalsBtn.addEventListener("click", () => {
   });
 });
 </script>
-
-<style>
-  /* Keep modal stuff at the bottom, precedence */
-  /* Modal backdrop */
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0; top: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0,0,0,0.4);
-  }
-
-  /* Modal box */
-  .modal-content {
-    background-color: #fff;
-    margin: 10% auto;
-    padding: 2rem;
-    border-radius: 12px;
-    width: 80%;
-    max-width: 600px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    position: relative;
-  }
-
-  /* Close button */
-  .close-btn {
-    position: absolute;
-    top: 12px;
-    right: 18px;
-    font-size: 24px;
-    font-weight: bold;
-    color: #444;
-    cursor: pointer;
-  }
-
-  .close-btn:hover {
-    color: #000;
-  }
-
-  .post-card {
-    cursor: pointer;
-  }
-
-  .add-to-goals-btn {
-  margin-top: 1rem;
-  background-color: #2b6cb0;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background 0.2s;
-}
-.add-to-goals-btn:hover {
-  background-color: #1e4e91;
-}
-</style>
 
 
 </body>
