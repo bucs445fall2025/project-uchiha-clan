@@ -127,7 +127,7 @@
 <h2 class="text-center text-gray-800 mt-12 text-3xl">Recipes</h2>
 <div class="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6 p-8">
   {% for post in posts %}
-    <div class="bg-white rounded-xl p-6 shadow-md hover:-translate-y-1 hover:shadow-lg transition-all cursor-pointer">
+    <div class="bg-white rounded-xl p-6 shadow-md hover:-translate-y-1 hover:shadow-lg transition-all cursor-pointer post-card" data-id="{{ post['_id'] }}">
       <h3 class="m-0 mb-2 text-2xl text-blue-700">{{ post['title'] }}</h3>
       {% if post['cuisine'] %}
         <p class="my-2 leading-6 text-gray-600"><strong>Cuisine:</strong> {{ post['cuisine'] }}</p>
@@ -159,60 +159,258 @@
     <p id="modal-content" class="mb-4"></p>
     <button id="addToGoalsBtn" class="mt-4 bg-blue-700 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-800">Add to Goals</button>
   </div>
+  <hr class="my-4">
+  <h4 class="text-lg font-semibold mb-2">Comments</h4>
+
+  <div id="comments-list" class="bg-gray-50 rounded-lg p-3 max-h-48 overflow-y-auto mb-3"></div>
+
+  <div class="flex flex-col gap-2">
+    <input type="text" id="commentUser" placeholder="Your name (optional)" class="border rounded p-2">
+    <textarea id="comment-input" placeholder="Write a comment..." class="border rounded p-2 resize-y h-20"></textarea>
+    <button id="post-comment-btn" class="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 self-end">Post Comment</button>
+  </div>
 </div>
 
 
 <!-- JS -->
-  <script>
-    // Autocomplete search suggestions
-    const searchInput = document.getElementById("search-input");
-    const suggestions = document.getElementById("suggestions");
-    searchInput.addEventListener("input", async () => {
-      const query = searchInput.value.trim();
-      if (!query) { suggestions.classList.add("hidden"); return; }
-      const res = await fetch(`/autocomplete?q=${encodeURIComponent(query)}`);
-      const data = await res.json();
-      suggestions.innerHTML = data.map(d => 
-        `<li class="px-3 py-2 hover:bg-gray-100 cursor-pointer">${d}</li>`
-      ).join("");
-      suggestions.classList.remove("hidden");
-      document.querySelectorAll("#suggestions li").forEach(li => {
-        li.onclick = () => {
-          searchInput.value = li.textContent;
-          suggestions.classList.add("hidden");
-        };
+<script>
+// Autocomplete search suggestions
+const searchInput = document.getElementById("search-input");
+const suggestions = document.getElementById("suggestions");
+
+searchInput.addEventListener("input", async () => {
+  const query = searchInput.value.trim();
+  if (!query) { 
+    suggestions.classList.add("hidden"); 
+    return; 
+  }
+  const res = await fetch(`/autocomplete?q=${encodeURIComponent(query)}`);
+  const data = await res.json();
+  suggestions.innerHTML = data.map(d => 
+    `<li class="px-3 py-2 hover:bg-gray-100 cursor-pointer">${d}</li>`
+  ).join("");
+  suggestions.classList.remove("hidden");
+  document.querySelectorAll("#suggestions li").forEach(li => {
+    li.onclick = () => {
+      searchInput.value = li.textContent;
+      suggestions.classList.add("hidden");
+    };
+  });
+});
+
+// Filter modal toggle
+const filterBtn = document.getElementById("filterBtn");
+const filterModal = document.getElementById("filterModal");
+filterBtn.onclick = () => filterModal.classList.remove("hidden");
+window.onclick = (e) => { if (e.target === filterModal) filterModal.classList.add("hidden"); };
+
+// Wait until DOM is fully loaded before attaching handlers
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("recipeModal");
+  const modalTitle = document.getElementById("modal-title");
+  const modalCuisine = document.getElementById("modal-cuisine");
+  const modalIngredients = document.getElementById("modal-ingredients");
+  const modalMacros = document.getElementById("modal-macros");
+  const modalContent = document.getElementById("modal-content");
+  const addToGoalsBtn = document.getElementById("addToGoalsBtn");
+  const closeModalBtn = document.querySelector(".close-btn");
+
+  // COMMENT ELEMENTS
+  const commentsList = document.getElementById("comments-list");
+  const commentInput = document.getElementById("comment-input");
+  const usernameInput = document.getElementById("username-input");
+  const postCommentBtn = document.getElementById("post-comment-btn");
+
+  let currentRecipe = null;
+
+  // Attach click listeners to recipe cards
+  document.querySelectorAll(".post-card").forEach(card => {
+    card.addEventListener("click", () => {
+      const id = card.dataset.id;
+      fetch(`/get_post/${id}`)
+        .then(res => res.json())
+        .then(post => {
+          currentRecipe = post;
+          modalTitle.textContent = post.title;
+          modalCuisine.textContent = post.cuisine ? `Cuisine: ${post.cuisine}` : "";
+          modalIngredients.textContent = post.ingredients ? `Ingredients: ${post.ingredients}` : "";
+          modalMacros.innerHTML = `
+            ${post.cals ? `<span>${post.cals} cal</span>` : ""}
+            ${post.protein ? `<span>${post.protein}g protein</span>` : ""}
+            ${post.carbs ? `<span>${post.carbs}g carbs</span>` : ""}
+            ${post.fats ? `<span>${post.fats}g fats</span>` : ""}
+          `;
+          modalContent.textContent = post.content || "";
+          modal.classList.remove("hidden");
+
+          // Load comments
+          commentsList.innerHTML = "";
+          if (post.comments && post.comments.length > 0) {
+            post.comments.forEach(c => {
+              const li = document.createElement("li");
+              li.textContent = `${c.user}: ${c.text}`;
+              
+              // Add delete button
+              const delBtn = document.createElement("button");
+              delBtn.textContent = "Delete";
+              delBtn.className = "ml-2 text-red-500";
+              delBtn.onclick = async (e) => {
+                e.stopPropagation();
+                await fetch(`/delete_comment/${post._id}/${c._id}`, { method: "POST" });
+                li.remove();
+              };
+              li.appendChild(delBtn);
+              commentsList.appendChild(li);
+            });
+          } else {
+            commentsList.innerHTML = "<li>No comments yet.</li>";
+          }
+        })
+        .catch(err => console.error("Error fetching post:", err));
+    });
+  });
+
+  // Close modal button
+  closeModalBtn.addEventListener("click", () => modal.classList.add("hidden"));
+
+  // Add to Goals functionality
+  addToGoalsBtn.addEventListener("click", () => {
+    if (!currentRecipe) return;
+    fetch("/add_to_goals", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(currentRecipe)
+    })
+      .then(res => res.json())
+      .then(data => {
+        alert(data.message || "Added to goals!");
+        modal.classList.add("hidden");
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Error adding to goals.");
+      });
+  });
+
+  // Post comment
+  postCommentBtn.addEventListener("click", async () => {
+    if (!currentRecipe) return;
+    const text = commentInput.value.trim();
+    const user = usernameInput.value.trim() || "Anonymous";
+    if (!text) return alert("Please enter a comment.");
+
+    const res = await fetch(`/add_comment/${currentRecipe._id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user, text })
+    });
+    if (!res.ok) return alert("Error posting comment.");
+
+    const data = await res.json();
+    const li = document.createElement("li");
+    li.textContent = `${data.comment.user}: ${data.comment.text}`;
+    
+    // Add delete button
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "Delete";
+    delBtn.className = "ml-2 text-red-500";
+    delBtn.onclick = async (e) => {
+      e.stopPropagation();
+      await fetch(`/delete_comment/${currentRecipe._id}/${data.comment._id}`, { method: "POST" });
+      li.remove();
+    };
+    li.appendChild(delBtn);
+
+    commentsList.appendChild(li);
+    commentInput.value = "";
+  });
+
+  // COMMENT FUNCTIONALITY
+document.addEventListener("DOMContentLoaded", () => {
+  const commentsList = document.getElementById("commentsList");
+  const commentInput = document.getElementById("commentText");
+  const usernameInput = document.getElementById("commentUser");
+  const postCommentBtn = document.getElementById("postCommentBtn");
+
+  function renderComments(comments, postId) {
+    commentsList.innerHTML = "";
+    if (!comments || comments.length === 0) {
+      commentsList.innerHTML = "<p class='text-gray-500'>No comments yet</p>";
+      return;
+    }
+
+    comments.forEach(c => {
+      const div = document.createElement("div");
+      div.className = "border-b border-gray-200 py-1 flex justify-between items-center";
+      div.innerHTML = `
+        <span><strong>${c.user}</strong>: ${c.text}</span>
+        <button class="text-red-500 text-sm ml-2" data-id="${c._id}">Delete</button>
+      `;
+      commentsList.appendChild(div);
+
+      // DELETE comment
+      div.querySelector("button").addEventListener("click", () => {
+        fetch(`/delete_comment/${postId}/${c._id}`, { method: "DELETE" })
+          .then(res => res.json())
+          .then(() => {
+            // Remove comment from UI
+            comments = comments.filter(cc => cc._id !== c._id);
+            renderComments(comments, postId);
+          })
+          .catch(err => console.error(err));
       });
     });
+  }
 
+  // POST comment
+  postCommentBtn.addEventListener("click", () => {
+    const postId = document.querySelector(".post-card.active")?.dataset.id;
+    if (!postId) return;
 
+    const text = commentInput.value.trim();
+    const user = usernameInput.value.trim() || "Anonymous";
+    if (!text) return alert("Comment cannot be empty");
 
-// Filter modal
-    const filterBtn = document.getElementById("filterBtn");
-    const filterModal = document.getElementById("filterModal");
-    const closeFilter = document.getElementById("closeFilter");
-    filterBtn.onclick = () => filterModal.classList.remove("hidden");
-    closeFilter.onclick = () => filterModal.classList.add("hidden");
-    window.onclick = (e) => { if (e.target === filterModal) filterModal.classList.add("hidden"); };
-
-
-//JSONify the 'currentrecpie' to send to the goals thru POST request
-addToGoalsBtn.addEventListener("click", () => {
-  fetch("/add_to_goals", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(currentRecipe)
-  })
-  .then(res => res.json())
-  .then(data => {
-    alert(data.message || "Added to goals!");
-    modal.classList.add("hidden");
-  })
-  .catch(err => {
-    console.error(err);
-    alert("Error adding to goals.");
+    fetch(`/add_comment/${postId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text, user })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) return alert(data.error);
+        commentInput.value = "";
+        usernameInput.value = "";
+        const comments = data.comment ? [data.comment] : [];
+        // Append to existing comments
+        const existingComments = Array.from(commentsList.querySelectorAll("div")).map(d => ({
+          _id: d.querySelector("button").dataset.id,
+          user: d.querySelector("span strong").textContent,
+          text: d.querySelector("span").textContent.split(": ")[1]
+        }));
+        renderComments([...existingComments, ...comments], postId);
+      })
+      .catch(err => console.error(err));
   });
+
+  // Whenever modal opens, render current comments
+  const observer = new MutationObserver(() => {
+    const modal = document.getElementById("recipeModal");
+    if (!modal.classList.contains("hidden")) {
+      const activeCard = document.querySelector(".post-card.active");
+      if (activeCard) {
+        const postId = activeCard.dataset.id;
+        fetch(`/get_post/${postId}`)
+          .then(res => res.json())
+          .then(post => renderComments(post.comments || [], postId))
+          .catch(err => console.error(err));
+      }
+    }
+  });
+
+  observer.observe(document.getElementById("recipeModal"), { attributes: true, attributeFilter: ["class"] });
+});
+  
 });
 </script>
 

@@ -184,6 +184,49 @@ def debugdb():
     from flask import jsonify
     return jsonify(posts_data)
 
+@app.route("/get_post/<post_id>")
+def get_post(post_id):
+    post = posts.find_one({"_id": ObjectId(post_id)})
+    if not post:
+        return jsonify({"error": "Post not found"}), 404
+    post["_id"] = str(post["_id"])
+    return jsonify(post)
+
+
+# ==============================
+# COMMENT SYSTEM
+# ==============================
+
+@app.route("/get_comments/<post_id>")
+def get_comments(post_id):
+    post = posts.find_one({"_id": ObjectId(post_id)}, {"comments": 1})
+    comments = post.get("comments", []) if post else []
+    return jsonify(comments)
+
+
+@app.route("/add_comment/<post_id>", methods=["POST"])
+def add_comment(post_id):
+    data = request.get_json()
+    username = data.get("user", "Anonymous").strip() or "Anonymous"
+    text = data.get("text", "").strip()
+    if not text:
+        return jsonify({"error": "Empty comment"}), 400
+
+    # Create a comment with its own ObjectId for easy deletion
+    comment = {"_id": str(ObjectId()), "user": username, "text": text}
+    posts.update_one({"_id": ObjectId(post_id)}, {"$push": {"comments": comment}})
+    return jsonify({"message": "Comment added successfully!", "comment": comment})
+
+
+@app.route("/delete_comment/<post_id>/<comment_id>", methods=["DELETE"])
+def delete_comment(post_id, comment_id):
+    posts.update_one(
+        {"_id": ObjectId(post_id)},
+        {"$pull": {"comments": {"_id": comment_id}}}
+    )
+    return jsonify({"message": "Comment deleted successfully!"})
+
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
