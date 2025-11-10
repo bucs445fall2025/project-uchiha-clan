@@ -28,7 +28,7 @@ Implement comment section
 
 Implement tailwind  
 Combine search/filter  
-Implement comment section
+Implement comment section (UI, Not functional yet)
 
 ### Incomplete Requirements
 
@@ -44,7 +44,7 @@ Implement comment section
 
 ## Requirements Flex
 
-<< # >>/5 requirement flexes remaining
+4/5 requirement flexes remaining
 
 ## Technical Debt
 
@@ -76,6 +76,6 @@ Implement progress metrics for goals page
 
 ### Team Work Assignments
 
-Jack: Progress metrics for goals
+Jack: Add "cooked" recipes to goals page, implement likes for posts
 Derek: Clean up UI on main page  
-Jackson: Clean up UI on goals page  
+Jackson: Change reset goals button in Goals UI to not delete all goals but instead just reset progress bar   
