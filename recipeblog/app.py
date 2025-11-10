@@ -19,7 +19,33 @@ if posts.count_documents({}) == 0:
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    # Grab filter params
+    # ---- POST: Add new recipe ----
+    if request.method == "POST":
+        title = request.form.get("title")
+        cuisine = request.form.get("cuisine")
+        ingredients = request.form.get("ingredients")
+        content = request.form.get("content")
+        cals = request.form.get("cals")
+        protein = request.form.get("protein")
+        carbs = request.form.get("carbs")
+        fats = request.form.get("fats")
+
+        if title:
+            posts.insert_one({
+                "title": title.strip(),
+                "cuisine": cuisine.strip() if cuisine else "",
+                "ingredients": ingredients.strip() if ingredients else "",
+                "content": content.strip() if content else "",
+                "cals": cals.strip() if cals else "",
+                "protein": protein.strip() if protein else "",
+                "carbs": carbs.strip() if carbs else "",
+                "fats": fats.strip() if fats else "",
+            })
+
+        return redirect("/")
+
+    # ---- GET: search & filter ----
+    search_query = request.args.get("q", "").strip()
     min_cals = request.args.get("min_cals")
     max_cals = request.args.get("max_cals")
     min_protein = request.args.get("min_protein")
@@ -30,52 +56,51 @@ def index():
     max_fats = request.args.get("max_fats")
 
     query = {}
-    filters = {
-        "cals": (min_cals, max_cals),
-        "protein": (min_protein, max_protein),
-        "carbs": (min_carbs, max_carbs),
-        "fats": (min_fats, max_fats)
-    }
 
-    # Build numeric range filters (convert stored strings to numbers safely)
-    for field, (min_val, max_val) in filters.items():
-        cond = {}
+    # --- Updated search: only match titles STARTING with query tokens ---
+    if search_query:
+        tokens = search_query.split()
+        regex_conditions = [{"title": {"$regex": rf"^{token}", "$options": "i"}} for token in tokens]
+        query["$and"] = regex_conditions
+
+    # --- Filters ---
+    expr_conditions = []
+    def add_range_condition(field, min_val, max_val):
         if min_val:
-            cond["$gte"] = float(min_val)
+            expr_conditions.append({"$gte": [{"$toDouble": f"${field}"}, float(min_val)]})
         if max_val:
-            cond["$lte"] = float(max_val)
-        if cond:
-            # Use $expr to convert field strings to numbers during comparison
-            query["$expr"] = {
-                "$and": [
-                    {"$gte": [{"$toDouble": f"${field}"}, cond.get("$gte", float("-inf"))]},
-                    {"$lte": [{"$toDouble": f"${field}"}, cond.get("$lte", float("inf"))]}
-                ]
-            }
+            expr_conditions.append({"$lte": [{"$toDouble": f"${field}"}, float(max_val)]})
+
+    add_range_condition("cals", min_cals, max_cals)
+    add_range_condition("protein", min_protein, max_protein)
+    add_range_condition("carbs", min_carbs, max_carbs)
+    add_range_condition("fats", min_fats, max_fats)
+
+    if expr_conditions:
+        query["$expr"] = {"$and": expr_conditions}
+
+    # Combine both conditions safely
+    if "$and" in query and "$expr" in query:
+        query = {"$and": [{"$and": query["$and"]}, {"$expr": query["$expr"]}]}
+    elif "$expr" in query:
+        query = {"$expr": query["$expr"]}
+    elif "$and" in query:
+        query = {"$and": query["$and"]}
 
     posts_list = list(posts.find(query).sort("_id", -1))
+    return render_template("index.html", posts=posts_list, query=search_query)
 
-    return render_template("index.html", posts=posts_list)
 
-    
-
-    #postlist = list(posts.find().sort("_id", -1))
-    #return render_template("index.html", posts=postlist)
-
-@app.route("/search", methods=["GET"])
-def search():
-    search_query = request.args.get("q", "").strip()
-
-    # If user typed something, search by title only
-    if search_query:
-        results = list(posts.find(
-            {"title": {"$regex": search_query, "$options": "i"}}
-        ).sort("_id", -1))
-    else:
-        results = []
-
-    # Render the main page template with the filtered posts
-    return render_template("index.html", posts=results, query=search_query)
+@app.route("/autocomplete")
+def autocomplete():
+    term = request.args.get("q", "").strip()
+    if not term:
+        return jsonify([])
+    suggestions = posts.find(
+        {"title": {"$regex": rf"^{term}", "$options": "i"}}, {"title": 1}
+    ).limit(5)
+    titles = [s["title"] for s in suggestions]
+    return jsonify(titles)
 
 
 @app.route("/goals", methods=["GET", "POST"])

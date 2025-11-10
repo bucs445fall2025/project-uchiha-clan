@@ -12,19 +12,32 @@
         <a href="/goals" class="bg-green-500 text-white px-4 py-2 rounded no-underline hover:bg-green-600">Goals</a>
     </div>
     
-<!-- Search Bar -->
-<div class="p-4">
-    <form method="GET" action="/search" class="flex gap-2">
-      <input 
-        type="text" 
-        name="q" 
-        placeholder="Search recipes..." 
-        value="{{ query or '' }}" 
-        class="flex-1 px-3 py-2 border border-gray-300 rounded"
-    />
-    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Search</button>
-  </form>
-</div>
+<!-- Search + Filter -->
+  <div class="p-6 max-w-3xl mx-auto">
+    <div class="flex items-center gap-3">
+      <form method="GET" action="/" class="flex flex-1 gap-2 relative">
+        <div class="relative w-full">
+          <input 
+            id="search-input"
+            type="text"
+            name="q"
+            placeholder="Search recipes..."
+            value="{{ query or '' }}"
+            class="w-full px-3 py-2 border border-gray-300 rounded"
+            autocomplete="off"
+          />
+          <ul id="suggestions" class="absolute bg-white border border-gray-200 rounded mt-1 w-full hidden z-10"></ul>
+        </div>
+        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Search</button>
+      </form>
+      <!-- Funnel filter icon -->
+      <button id="filterBtn" class="bg-gray-200 p-2 rounded hover:bg-gray-300">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L15 13.414V20l-6-3v-3.586L3.293 6.707A1 1 0 013 6V4z" />
+        </svg>
+      </button>
+    </div>
+  </div>
 
 <div class="bg-white p-8 rounded-xl shadow-md w-96 mx-auto my-5">
 <h1 class="text-center text-gray-800 mb-6 text-xl">Post</h1>
@@ -50,42 +63,65 @@
     </form>
     </div>
 
-<!-- Filter Form -->
-<div class="bg-white p-6 rounded-xl shadow-md max-w-2xl mx-auto my-5">
-  <h2 class="text-center text-gray-800 mt-12 text-3xl mb-4">Filter Recipes</h2>
-  <form method="GET" action="/">
-    <div class="flex gap-2 items-center mb-3">
-      <label class="font-semibold w-32">Calories:</label>
-      <input type="number" name="min_cals" placeholder="Min"
-      class="flex-1 px-3 py-2 border border-gray-300 rounded">
-      <input type="number" name="max_cals" placeholder="Max"
-      class="flex-1 px-3 py-2 border border-gray-300 rounded">
-    </div>
-    <div class="flex gap-2 items-center mb-3">
-      <label class="font-semibold w-32">Protein (g):</label>
-      <input type="number" name="min_protein" placeholder="Min"
-      class="flex-1 px-3 py-2 border border-gray-300 rounded">
-      <input type="number" name="max_protein" placeholder="Max"
-      class="flex-1 px-3 py-2 border border-gray-300 rounded">
-    </div>
-    <div class="flex gap-2 items-center mb-3">
-      <label class="font-semibold w-32">Carbs (g):</label>
-      <input type="number" name="min_carbs" placeholder="Min"
-      class="flex-1 px-3 py-2 border border-gray-300 rounded">
-      <input type="number" name="max_carbs" placeholder="Max"
-      class="flex-1 px-3 py-2 border border-gray-300 rounded">
-    </div>
-    <div class="flex gap-2 items-center mb-3">
-      <label class="font-semibold w-32">Fats (g):</label>
-      <input type="number" name="min_fats" placeholder="Min"
-      class="flex-1 px-3 py-2 border border-gray-300 rounded">
-      <input type="number" name="max_fats" placeholder="Max"
-      class="flex-1 px-3 py-2 border border-gray-300 rounded">
-    </div>
-    <button type="submit" class="w-full mt-4 p-3 bg-green-500 text-white rounded hover:bg-green-600">Apply Filters</button>
-  </form>
-</div>
 
+<!-- Filter Modal -->
+<div id="filterModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+  <div class="bg-white rounded-2xl shadow-lg w-96 p-6 relative">
+    <h2 class="text-xl font-semibold mb-4 text-gray-800">Filter Recipes</h2>
+
+    <form method="get" action="/" class="space-y-3">
+      <!-- Calories -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Calories</label>
+        <div class="flex gap-2">
+          <input type="number" name="min_cals" placeholder="Min" class="w-1/2 border rounded-lg px-2 py-1 text-sm">
+          <input type="number" name="max_cals" placeholder="Max" class="w-1/2 border rounded-lg px-2 py-1 text-sm">
+        </div>
+      </div>
+
+      <!-- Protein -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Protein</label>
+        <div class="flex gap-2">
+          <input type="number" name="min_protein" placeholder="Min" class="w-1/2 border rounded-lg px-2 py-1 text-sm">
+          <input type="number" name="max_protein" placeholder="Max" class="w-1/2 border rounded-lg px-2 py-1 text-sm">
+        </div>
+      </div>
+
+      <!-- Carbs -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Carbs</label>
+        <div class="flex gap-2">
+          <input type="number" name="min_carbs" placeholder="Min" class="w-1/2 border rounded-lg px-2 py-1 text-sm">
+          <input type="number" name="max_carbs" placeholder="Max" class="w-1/2 border rounded-lg px-2 py-1 text-sm">
+        </div>
+      </div>
+
+      <!-- Fats -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Fats</label>
+        <div class="flex gap-2">
+          <input type="number" name="min_fats" placeholder="Min" class="w-1/2 border rounded-lg px-2 py-1 text-sm">
+          <input type="number" name="max_fats" placeholder="Max" class="w-1/2 border rounded-lg px-2 py-1 text-sm">
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex justify-between pt-4">
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+          Apply Filters
+        </button>
+        <a href="/" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300">
+          Reset
+        </a>
+      </div>
+    </form>
+
+    <button onclick="toggleFilterModal()" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800">
+      ✕
+    </button>
+  </div>
+</div>
 
 
 <h2 class="text-center text-gray-800 mt-12 text-3xl">Recipes</h2>
@@ -125,49 +161,39 @@
   </div>
 </div>
 
-<script>
-  const modal = document.getElementById("recipeModal");
-  const closeBtn = document.querySelector(".close-btn");
 
-  closeBtn.onclick = () => {
-    modal.classList.add("hidden");
-  };
+<!-- JS -->
+  <script>
+    // Autocomplete search suggestions
+    const searchInput = document.getElementById("search-input");
+    const suggestions = document.getElementById("suggestions");
+    searchInput.addEventListener("input", async () => {
+      const query = searchInput.value.trim();
+      if (!query) { suggestions.classList.add("hidden"); return; }
+      const res = await fetch(`/autocomplete?q=${encodeURIComponent(query)}`);
+      const data = await res.json();
+      suggestions.innerHTML = data.map(d => 
+        `<li class="px-3 py-2 hover:bg-gray-100 cursor-pointer">${d}</li>`
+      ).join("");
+      suggestions.classList.remove("hidden");
+      document.querySelectorAll("#suggestions li").forEach(li => {
+        li.onclick = () => {
+          searchInput.value = li.textContent;
+          suggestions.classList.add("hidden");
+        };
+      });
+    });
 
-  window.onclick = (event) => {
-    if (event.target === modal) {
-      modal.classList.add("hidden");
-    }
-  };
 
-const addToGoalsBtn = document.getElementById("addToGoalsBtn");
 
-let currentRecipe = {};
+// Filter modal
+    const filterBtn = document.getElementById("filterBtn");
+    const filterModal = document.getElementById("filterModal");
+    const closeFilter = document.getElementById("closeFilter");
+    filterBtn.onclick = () => filterModal.classList.remove("hidden");
+    closeFilter.onclick = () => filterModal.classList.add("hidden");
+    window.onclick = (e) => { if (e.target === filterModal) filterModal.classList.add("hidden"); };
 
-document.querySelectorAll(".bg-white.rounded-xl.p-6.shadow-md").forEach(card => {
-  card.addEventListener("click", () => {
-    const title = card.querySelector("h3")?.innerText || "";
-    const cuisine = card.querySelector("p:nth-of-type(1)")?.innerText || "";
-    const ingredients = card.querySelector("p:nth-of-type(2)")?.innerText || "";
-    const macrosDiv = card.querySelector("div");
-    const content = card.querySelector("p:last-of-type")?.innerText || "";
-
-    // Model the macro retrieval off of the code above
-    const cals = parseFloat(macrosDiv?.querySelector("span:nth-child(1)")?.innerText) || 0;
-    const protein = parseFloat(macrosDiv?.querySelector("span:nth-child(2)")?.innerText) || 0;
-    const carbs = parseFloat(macrosDiv?.querySelector("span:nth-child(3)")?.innerText) || 0;
-    const fats = parseFloat(macrosDiv?.querySelector("span:nth-child(4)")?.innerText) || 0;
-
-    currentRecipe = { title, cuisine, ingredients, cals, protein, carbs, fats, content };
-
-    document.getElementById("modal-title").innerText = title;
-    document.getElementById("modal-cuisine").innerText = cuisine;
-    document.getElementById("modal-ingredients").innerText = ingredients;
-    document.getElementById("modal-macros").innerText = `${cals} cal | ${protein}g protein | ${carbs}g carbs | ${fats}g fats`;
-    document.getElementById("modal-content").innerText = content;
-
-    modal.classList.remove("hidden");
-  });
-});
 
 //JSONify the 'currentrecpie' to send to the goals thru POST request
 addToGoalsBtn.addEventListener("click", () => {
