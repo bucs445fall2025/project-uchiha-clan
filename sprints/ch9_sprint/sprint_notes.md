@@ -76,6 +76,6 @@ Implement progress metrics for goals page
 
 ### Team Work Assignments
 
-Jack: Add "cooked" recipes to goals page, implement likes for posts
-Derek: Clean up UI on main page  
+Jack: Add "cooked" recipes to goals page, implement likes for posts  
+Derek: Clean up UI on main page 
 Jackson: Change reset goals button in Goals UI to not delete all goals but instead just reset progress bar   
