@@ -138,7 +138,9 @@ def goals():
             if macro not in g:
                 g[macro] = 0
 
-    return render_template("goals.html", goals=goals_list)
+    goal_recipe_list = list(db.goal_recipes.find())
+
+    return render_template("goals.html", goals=goals_list, goal_recipes=goal_recipe_list)
 
 
 
@@ -173,6 +175,17 @@ def add_to_goals():
             {"_id": g["_id"]},
             {"$set": {"progress": progress}}
         )
+
+    db.goal_recipes.insert_one({
+        "title": data.get("title", ""),
+        "cuisine": data.get("cuisine", ""),
+        "ingredients": data.get("ingredients", ""),
+        "content": data.get("content", ""),
+        "cals": data.get("cals", ""),
+        "protein": data.get("protein", ""),
+        "carbs": data.get("carbs", ""),
+        "fats": data.get("fats", "")
+    })
 
     return jsonify({"message": "Recipe added to goals successfully!"}), 200
 
@@ -225,6 +238,16 @@ def delete_comment(post_id, comment_id):
         {"$pull": {"comments": {"_id": comment_id}}}
     )
     return jsonify({"message": "Comment deleted successfully!"})
+
+
+@app.route("/like/<post_id>", methods=["POST"])
+def like_post(post_id):
+    post = posts.find_one({"_id": ObjectId(post_id)})
+    if post:
+        new_likes = post.get("likes", 0) + 1
+        posts.update_one({"_id": ObjectId(post_id)}, {"$set": {"likes": new_likes}})
+        return jsonify({"success": True, "likes": new_likes})
+    return jsonify({"success": False}), 404
 
 
 

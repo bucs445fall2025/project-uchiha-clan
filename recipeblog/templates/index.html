@@ -158,6 +158,10 @@
     <div id="modal-macros" class="mb-2"></div>
     <p id="modal-content" class="mb-4"></p>
     <button id="addToGoalsBtn" class="mt-4 bg-blue-700 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-800">Add to Goals</button>
+    <button id="modalLikeBtn" class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded transition">
+    ❤ Like
+    </button>
+    <span id="modalLikeCount" class="text-gray-700 text-lg font-semibold"></span>
   </div>
   <hr class="my-4">
   <h4 class="text-lg font-semibold mb-2">Comments</h4>
@@ -265,6 +269,26 @@ document.addEventListener("DOMContentLoaded", () => {
           } else {
             commentsList.innerHTML = "<li>No comments yet.</li>";
           }
+
+          // Likes feature
+          const likeBtn = document.getElementById("modalLikeBtn");
+          const likeCount = document.getElementById("modalLikeCount");
+
+          if (likeBtn && likeCount) {
+            likeCount.textContent = post.likes || 0;
+
+            const newLikeBtn = likeBtn.cloneNode(true);
+            likeBtn.parentNode.replaceChild(newLikeBtn, likeBtn);
+
+            newLikeBtn.addEventListener("click", async () => {
+              const res = await fetch(`/like/${post._id}`, { method: "POST" });
+              const data = await res.json();
+              if (data.success) {
+                likeCount.textContent = data.likes;
+              }
+            });
+          }
+
         })
         .catch(err => console.error("Error fetching post:", err));
     });
