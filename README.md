@@ -40,10 +40,12 @@ End with an example of getting some output from the system, such as a menu or pr
 
 1. Clone Repo to a new folder.
 2. CD into /recipeblog/
-3. Run "docker-compose up --build" in the command line (While CD'd into /recipeblog/)
-4. Enter "localhost" into a browser of your choice.
-5. Enjoy the features of the site!
-6. After quitting app (ctrl+c in command line), run "docker-compose down"
+3. Open Docker Desktop
+4. Run "docker-compose up --build" in the command line (While CD'd into /recipeblog/)
+5. Wait for dependencies to download via pip
+6. Enter "localhost" into a browser of your choice
+7. Enjoy the features of the site!
+8. After quitting app (ctrl+c in command line), run "docker-compose down"
 
 ## Built With
  << list all frameworks and modules used here >>
