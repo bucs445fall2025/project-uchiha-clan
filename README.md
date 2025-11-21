@@ -1,4 +1,4 @@
-# << Project Name >>
+# Cooky
 ## CS 445 Final Project
 ### Fall 2025
 
@@ -8,15 +8,18 @@ Derek Li
 Jack Sutera
 
 ## Getting Started
-<<One paragraph of project description goes here>>
+Cooky is a recipe-sharing site centered around a blog feature, where users can submit their favorite recipes, browse other  
+users' recipes, and track dietary goals as an additional feature. Recipe posts can be liked, commented on, and added directly  
+to your goals. Multiple goals can be created based on macro counts, and when you eat a posted recipe, you can add its macros  
+directly to your goals from that recipe card. 
 
 ### Roadmap
   <<
 A list of features, function or non-functional, you would like to add in the future if you had time, i.e. Phase 2 stuff
 - [ ] Add Changelog
-- [ ] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
+- [ ] Add a "recipe builder" to easily calculate caloric/macro amounts
+- [ ] Add User Accounts
+- [ ] Add a preliminary database of recipes
   >>
   
 ## SRS
@@ -34,7 +37,13 @@ Say what the step will be
 And repeat  
 `until finished`  
 End with an example of getting some output from the system, such as a menu or prompt
->>
+
+1. Clone Repo to a new folder.
+2. CD into /recipeblog/
+3. Run "docker-compose up --build" in the command line (While CD'd into /recipeblog/)
+4. Enter "localhost" into a browser of your choice.
+5. Enjoy the features of the site!
+6. After quitting app (ctrl+c in command line), run "docker-compose down"
 
 ## Built With
  << list all frameworks and modules used here >>
