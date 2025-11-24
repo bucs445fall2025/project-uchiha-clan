@@ -1,0 +1,41 @@
+services:
+  app:
+    image: app:latest
+    build:
+      context: .
+      #dockerfile: Dockerfile
+    working_dir: /var/app
+    environment:
+      - FLASK_APP=app.py
+    container_name: app
+    volumes:
+      - ./app.py:/var/app/app.py
+    command: ["flask", "run", "--host=0.0.0.0"]
+    ports:
+      - "80:5000"
+    depends_on:
+      - mongo
+  
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"   # optional: expose DB to host
+    volumes:
+      - mongo_data:/data/db   # persist data
+
+  # app2:
+  #   image: app:latest
+  #   build:
+  #     context: .
+  #     #dockerfile: Dockerfile
+  #   working_dir: /var/app
+  #   environment:
+  #     - FLASK_APP=app.py
+  #   container_name: app2
+  #   volumes:
+  #     - ./app.py:/var/app/app.py
+  #   command: ["flask", "run", "--host=0.0.0.0"]
+  #   ports:
+  #     - "8080:5000"

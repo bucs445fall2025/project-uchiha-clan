@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>COOKY</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="font-sans">
+    <div class="grid grid-cols-3 items-center p-2.5 bg-gray-100">
+      <div></div> <!-- Empty left side for symmetry -->
+
+      <h1 class="text-center text-gray-800 text-2xl font-semibold">
+          COOKY
+      </h1>
+
+      <div class="flex justify-end">
+          <a href="/goals" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+              Goals
+          </a>
+      </div>
+    </div>
+    
+<!-- Search + Filter -->
+  <div class="p-6 max-w-3xl mx-auto">
+    <div class="flex items-center gap-3">
+      <form method="GET" action="/" class="flex flex-1 gap-2 relative">
+        <div class="relative w-full">
+          <input 
+            id="search-input"
+            type="text"
+            name="q"
+            placeholder="Search recipes..."
+            value="{{ query or '' }}"
+            class="w-full px-3 py-2 border border-gray-300 rounded"
+            autocomplete="off"
+          />
+          <ul id="suggestions" class="absolute bg-white border border-gray-200 rounded mt-1 w-full hidden z-10"></ul>
+        </div>
+        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Search</button>
+      </form>
+      <!-- Funnel filter icon -->
+      <button id="filterBtn" class="bg-gray-200 p-2 rounded hover:bg-gray-300">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L15 13.414V20l-6-3v-3.586L3.293 6.707A1 1 0 013 6V4z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+<div class="bg-white p-8 rounded-xl shadow-md w-96 mx-auto my-5">
+<h1 class="text-center text-gray-800 mb-6 text-xl">Post</h1>
+    
+    <form method="POST">
+        <label class="block mt-4 font-bold text-gray-600">Title</label><input type="text" name="title" placeholder="Ex: Grandma's Chocolate Chip Cookies"
+        class="w-full p-2 mt-1.5 border border-gray-300 rounded text-base"><br>
+        <label>Cuisine</label><input type="text" name="cuisine" placeholder="Ex: Italian, Greek"
+        class="w-full p-2 mt-1.5 border border-gray-300 rounded text-base"><br>
+        <label>Ingredients</label><input type="text" name="ingredients" placeholder="Ex: Chicken breast, brown rice, paprika, vegetable oil"
+        class="w-full p-2 mt-1.5 border border-gray-300 rounded text-base"><br>
+        <label class="block mt-4 font-bold text-gray-600">Macros</label>
+        <input type="number" name="cals" placeholder="Calories"
+        class="w-full p-2 mt-1.5 border border-gray-300 rounded text-base">
+        <input type="number" name="protein" placeholder="Protein (g)"
+        class="w-full p-2 mt-1.5 border border-gray-300 rounded text-base">
+        <input type="number" name="carbs" placeholder="Carbohydrates (g)"
+        class="w-full p-2 mt-1.5 border border-gray-300 rounded text-base">
+        <input type="number" name="fats" placeholder="Fats (g)"
+        class="w-full p-2 mt-1.5 border border-gray-300 rounded text-base">
+        <label class="block mt-4 font-bold text-gray-600">Instructions</label><textarea name="content" class="w-full p-2 mt-1.5 border border-gray-300 rounded text-base h-24 resize-y"> </textarea><br>
+        <button type="submit" class="block w-full mt-6 p-3 bg-green-500 text-white text-base border-0 rounded cursor-pointer hover:bg-green-600">Submit form</button>
+    </form>
+    </div>
+
+
+<!-- Filter Modal -->
+<div id="filterModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+  <div class="bg-white rounded-2xl shadow-lg w-96 p-6 relative">
+    <h2 class="text-xl font-semibold mb-4 text-gray-800">Filter Recipes</h2>
+
+    <form method="get" action="/" class="space-y-3">
+      <!-- Calories -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Calories</label>
+        <div class="flex gap-2">
+          <input type="number" name="min_cals" placeholder="Min" class="w-1/2 border rounded-lg px-2 py-1 text-sm">
+          <input type="number" name="max_cals" placeholder="Max" class="w-1/2 border rounded-lg px-2 py-1 text-sm">
+        </div>
+      </div>
+
+      <!-- Protein -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Protein</label>
+        <div class="flex gap-2">
+          <input type="number" name="min_protein" placeholder="Min" class="w-1/2 border rounded-lg px-2 py-1 text-sm">
+          <input type="number" name="max_protein" placeholder="Max" class="w-1/2 border rounded-lg px-2 py-1 text-sm">
+        </div>
+      </div>
+
+      <!-- Carbs -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Carbs</label>
+        <div class="flex gap-2">
+          <input type="number" name="min_carbs" placeholder="Min" class="w-1/2 border rounded-lg px-2 py-1 text-sm">
+          <input type="number" name="max_carbs" placeholder="Max" class="w-1/2 border rounded-lg px-2 py-1 text-sm">
+        </div>
+      </div>
+
+      <!-- Fats -->
+      <div>
+        <label class="block text-sm font-medium text-gray-600">Fats</label>
+        <div class="flex gap-2">
+          <input type="number" name="min_fats" placeholder="Min" class="w-1/2 border rounded-lg px-2 py-1 text-sm">
+          <input type="number" name="max_fats" placeholder="Max" class="w-1/2 border rounded-lg px-2 py-1 text-sm">
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex justify-between pt-4">
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+          Apply Filters
+        </button>
+        <a href="/" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300">
+          Reset
+        </a>
+      </div>
+    </form>
+
+    <button 
+      type="button"
+      onclick="toggleFilterModal()" 
+      class="absolute top-3 right-3 text-gray-500 hover:text-gray-800">
+      ✕
+    </button>
+  </div>
+</div>
+
+
+<h2 class="text-center text-gray-800 mt-12 text-3xl">Recipes</h2>
+<div class="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6 p-8">
+  {% for post in posts %}
+    <div class="bg-white rounded-xl p-6 shadow-md hover:-translate-y-1 hover:shadow-lg transition-all cursor-pointer post-card" data-id="{{ post['_id'] }}">
+      <h3 class="m-0 mb-2 text-2xl text-blue-700">{{ post['title'] }}</h3>
+      {% if post['cuisine'] %}
+        <p class="my-2 leading-6 text-gray-600"><strong>Cuisine:</strong> {{ post['cuisine'] }}</p>
+      {% endif %}
+      {% if post['ingredients'] %}
+        <p class="my-2 leading-6 text-gray-600"><strong>Ingredients:</strong> {{ post['ingredients'] }}</p>
+      {% endif %}
+      <div class="flex flex-wrap gap-2 mt-2">
+        {% if post['cals'] %}<span class="bg-gray-100 px-2 py-1 rounded text-sm">{{ post['cals'] }} cal</span>{% endif %}
+        {% if post['protein'] %}<span class="bg-gray-100 px-2 py-1 rounded text-sm">{{ post['protein'] }}g protein</span>{% endif %}
+        {% if post['carbs'] %}<span class="bg-gray-100 px-2 py-1 rounded text-sm">{{ post['carbs'] }}g carbs</span>{% endif %}
+        {% if post['fats'] %}<span class="bg-gray-100 px-2 py-1 rounded text-sm">{{ post['fats'] }}g fats</span>{% endif %}
+      </div>
+      {% if post['content'] %}
+        <p class="my-2 leading-6 text-gray-600">{{ post['content'] }}</p>
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>
+
+<!-- Modal  -->
+<div id="recipeModal" class="hidden fixed z-[1000] left-0 top-0 w-full h-full bg-black/40">
+  <div class="bg-white my-[10%] mx-auto p-8 rounded-xl w-4/5 max-w-2xl shadow-lg relative">
+    <span class="close-btn absolute top-3 right-5 text-2xl font-bold text-gray-600 cursor-pointer hover:text-black">&times;</span>
+    <h3 id="modal-title" class="text-2xl mb-4"></h3>
+    <p id="modal-cuisine" class="mb-2"></p>
+    <p id="modal-ingredients" class="mb-2"></p>
+    <div id="modal-macros" class="mb-2"></div>
+    <p id="modal-content" class="mb-4"></p>
+    <button id="addToGoalsBtn" class="mt-4 bg-blue-700 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-800">Add to Goals</button>
+    <button id="modalLikeBtn" class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded transition">
+    ❤ Like
+    </button>
+    <span id="modalLikeCount" class="text-gray-700 text-lg font-semibold"></span>
+  </div>
+  <hr class="my-4">
+  <h4 class="text-lg font-semibold mb-2">Comments</h4>
+
+  <div id="comments-list" class="bg-gray-50 rounded-lg p-3 max-h-48 overflow-y-auto mb-3"></div>
+
+  <div class="flex flex-col gap-2">
+    <input type="text" id="username-input" placeholder="Your name (optional)" class="border rounded p-2">
+    <textarea id="comment-input" placeholder="Write a comment..." class="border rounded p-2 resize-y h-20"></textarea>
+    <button id="post-comment-btn" class="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 self-end">Post Comment</button>
+  </div>
+</div>
+
+
+<!-- JS -->
+<script>
+// Autocomplete search suggestions
+const searchInput = document.getElementById("search-input");
+const suggestions = document.getElementById("suggestions");
+
+searchInput.addEventListener("input", async () => {
+  const query = searchInput.value.trim();
+  if (!query) { 
+    suggestions.classList.add("hidden"); 
+    return; 
+  }
+  const res = await fetch(`/autocomplete?q=${encodeURIComponent(query)}`);
+  const data = await res.json();
+  suggestions.innerHTML = data.map(d => 
+    `<li class="px-3 py-2 hover:bg-gray-100 cursor-pointer">${d}</li>`
+  ).join("");
+  suggestions.classList.remove("hidden");
+  document.querySelectorAll("#suggestions li").forEach(li => {
+    li.onclick = () => {
+      searchInput.value = li.textContent;
+      suggestions.classList.add("hidden");
+    };
+  });
+});
+
+// Filter modal toggle
+const filterBtn = document.getElementById("filterBtn");
+const filterModal = document.getElementById("filterModal");
+filterBtn.onclick = () => filterModal.classList.remove("hidden");
+window.onclick = (e) => { if (e.target === filterModal) filterModal.classList.add("hidden"); };
+
+function toggleFilterModal() {
+  const modal = document.getElementById("filterModal");
+  modal.classList.toggle("hidden");
+}
+
+// Wait until DOM is fully loaded before attaching handlers
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("recipeModal");
+  const modalTitle = document.getElementById("modal-title");
+  const modalCuisine = document.getElementById("modal-cuisine");
+  const modalIngredients = document.getElementById("modal-ingredients");
+  const modalMacros = document.getElementById("modal-macros");
+  const modalContent = document.getElementById("modal-content");
+  const addToGoalsBtn = document.getElementById("addToGoalsBtn");
+  const closeModalBtn = document.querySelector(".close-btn");
+
+  // COMMENT ELEMENTS
+  const commentsList = document.getElementById("comments-list");
+  const commentInput = document.getElementById("comment-input");
+  const usernameInput = document.getElementById("username-input");
+  const postCommentBtn = document.getElementById("post-comment-btn");
+
+  let currentRecipe = null;
+
+  // Attach click listeners to recipe cards
+  document.querySelectorAll(".post-card").forEach(card => {
+    card.addEventListener("click", () => {
+      const id = card.dataset.id;
+      fetch(`/get_post/${id}`)
+        .then(res => res.json())
+        .then(post => {
+          currentRecipe = post;
+          modalTitle.textContent = post.title;
+          modalCuisine.textContent = post.cuisine ? `Cuisine: ${post.cuisine}` : "";
+          modalIngredients.textContent = post.ingredients ? `Ingredients: ${post.ingredients}` : "";
+          modalMacros.innerHTML = `
+            ${post.cals ? `<span>${post.cals} cal</span>` : ""}
+            ${post.protein ? `<span>${post.protein}g protein</span>` : ""}
+            ${post.carbs ? `<span>${post.carbs}g carbs</span>` : ""}
+            ${post.fats ? `<span>${post.fats}g fats</span>` : ""}
+          `;
+          modalContent.textContent = post.content || "";
+          modal.classList.remove("hidden");
+
+          // Load comments
+          // loadComments(post._id);
+
+          // =============================
+          // LOAD COMMENTS FROM NEW COLLECTION
+          // =============================
+          async function loadComments(postId) {
+            const res = await fetch(`/get_comments/${postId}`);
+            const comments = await res.json();
+
+            commentsList.innerHTML = "";
+
+            if (!comments.length) {
+                commentsList.innerHTML = "<p class='text-gray-500'>No comments yet</p>";
+                return;
+            }
+
+            comments.forEach(c => {
+                const div = document.createElement("div");
+                div.className = "border-b border-gray-200 py-1 flex justify-between items-center";
+
+                div.innerHTML = `
+                    <span><strong>${c.user}</strong>: ${c.text}</span>
+                    <button class="text-red-500 text-sm ml-2" data-id="${c._id}">Delete</button>
+                `;
+
+                // Delete button handler
+                div.querySelector("button").onclick = async () => {
+                    await fetch(`/delete_comment/${postId}/${c._id}`, { method: "DELETE" });
+                    loadComments(postId);
+                };
+
+                commentsList.appendChild(div);
+            });
+        }
+
+          // Likes feature
+          const likeBtn = document.getElementById("modalLikeBtn");
+          const likeCount = document.getElementById("modalLikeCount");
+
+          if (likeBtn && likeCount) {
+            likeCount.textContent = post.likes || 0;
+
+            const newLikeBtn = likeBtn.cloneNode(true);
+            likeBtn.parentNode.replaceChild(newLikeBtn, likeBtn);
+
+            newLikeBtn.addEventListener("click", async () => {
+              const res = await fetch(`/like/${post._id}`, { method: "POST" });
+              const data = await res.json();
+              if (data.success) {
+                likeCount.textContent = data.likes;
+              }
+            });
+          }
+
+        })
+        .catch(err => console.error("Error fetching post:", err));
+    });
+  });
+
+  // Close modal button
+  closeModalBtn.addEventListener("click", () => modal.classList.add("hidden"));
+
+  // Add to Goals functionality
+  addToGoalsBtn.addEventListener("click", () => {
+    if (!currentRecipe) return;
+    fetch("/add_to_goals", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(currentRecipe)
+    })
+      .then(res => res.json())
+      .then(data => {
+        alert(data.message || "Added to goals!");
+        modal.classList.add("hidden");
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Error adding to goals.");
+      });
+  });
+
+  // Post comment
+  postCommentBtn.addEventListener("click", async () => {
+    if (!currentRecipe) return;
+    const text = commentInput.value.trim();
+    const user = usernameInput.value.trim() || "Anonymous";
+    if (!text) return alert("Please enter a comment.");
+
+    const res = await fetch(`/add_comment/${currentRecipe._id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user, text })
+    });
+    if (!res.ok) return alert("Error posting comment.");
+
+    const data = await res.json();
+    const li = document.createElement("li");
+    li.textContent = `${data.comment.user}: ${data.comment.text}`;
+    
+    // Add delete button
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "Delete";
+    delBtn.className = "ml-2 text-red-500";
+    delBtn.onclick = async (e) => {
+      e.stopPropagation();
+      await fetch(`/delete_comment/${currentRecipe._id}/${data.comment._id}`, { method: "POST" });
+      li.remove();
+    };
+    li.appendChild(delBtn);
+
+    commentsList.appendChild(li);
+    commentInput.value = "";
+  });
+
+  // COMMENT FUNCTIONALITY
+document.addEventListener("DOMContentLoaded", () => {
+  const commentsList = document.getElementById("commentsList");
+  const commentInput = document.getElementById("commentText");
+  const usernameInput = document.getElementById("commentUser");
+  const postCommentBtn = document.getElementById("postCommentBtn");
+
+  function renderComments(comments, postId) {
+    commentsList.innerHTML = "";
+    if (!comments || comments.length === 0) {
+      commentsList.innerHTML = "<p class='text-gray-500'>No comments yet</p>";
+      return;
+    }
+
+    comments.forEach(c => {
+      const div = document.createElement("div");
+      div.className = "border-b border-gray-200 py-1 flex justify-between items-center";
+      div.innerHTML = `
+        <span><strong>${c.user}</strong>: ${c.text}</span>
+        <button class="text-red-500 text-sm ml-2" data-id="${c._id}">Delete</button>
+      `;
+      commentsList.appendChild(div);
+
+      // DELETE comment
+      div.querySelector("button").addEventListener("click", () => {
+        fetch(`/delete_comment/${postId}/${c._id}`, { method: "DELETE" })
+          .then(res => res.json())
+          .then(() => {
+            // Remove comment from UI
+            comments = comments.filter(cc => cc._id !== c._id);
+            renderComments(comments, postId);
+          })
+          .catch(err => console.error(err));
+      });
+    });
+  }
+
+  // POST comment
+  postCommentBtn.addEventListener("click", () => {
+    const postId = document.querySelector(".post-card.active")?.dataset.id;
+    if (!postId) return;
+
+    const text = commentInput.value.trim();
+    const user = usernameInput.value.trim() || "Anonymous";
+    if (!text) return alert("Comment cannot be empty");
+
+    fetch(`/add_comment/${postId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text, user })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) return alert(data.error);
+        commentInput.value = "";
+        usernameInput.value = "";
+        const comments = data.comment ? [data.comment] : [];
+        // Append to existing comments
+        const existingComments = Array.from(commentsList.querySelectorAll("div")).map(d => ({
+          _id: d.querySelector("button").dataset.id,
+          user: d.querySelector("span strong").textContent,
+          text: d.querySelector("span").textContent.split(": ")[1]
+        }));
+        renderComments([...existingComments, ...comments], postId);
+      })
+      .catch(err => console.error(err));
+  });
+
+  // Whenever modal opens, render current comments
+  const observer = new MutationObserver(() => {
+    const modal = document.getElementById("recipeModal");
+    if (!modal.classList.contains("hidden")) {
+      const activeCard = document.querySelector(".post-card.active");
+      if (activeCard) {
+        const postId = activeCard.dataset.id;
+        fetch(`/get_post/${postId}`)
+          .then(res => res.json())
+          .then(post => renderComments(post.comments || [], postId))
+          .catch(err => console.error(err));
+      }
+    }
+  });
+
+  observer.observe(document.getElementById("recipeModal"), { attributes: true, attributeFilter: ["class"] });
+});
+  
+});
+</script>
+
+
+</body>
+</html>
