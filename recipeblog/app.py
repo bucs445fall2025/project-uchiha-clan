@@ -3,6 +3,7 @@
 from flask import Flask, request, render_template, redirect, jsonify
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from datetime import datetime
 import os
 
 app = Flask(__name__)
@@ -11,6 +12,7 @@ app = Flask(__name__)
 connect = MongoClient("mongodb://mongodb:27017")
 db = connect["recipe_base"]
 posts = db["posts"]
+comments = db["comments"]
 
 # Test post
 if posts.count_documents({}) == 0:
@@ -209,7 +211,7 @@ def get_post(post_id):
 # ==============================
 # COMMENT SYSTEM
 # ==============================
-
+'''
 @app.route("/get_comments/<post_id>")
 def get_comments(post_id):
     post = posts.find_one({"_id": ObjectId(post_id)}, {"comments": 1})
@@ -238,6 +240,7 @@ def delete_comment(post_id, comment_id):
         {"$pull": {"comments": {"_id": comment_id}}}
     )
     return jsonify({"message": "Comment deleted successfully!"})
+'''
 
 
 @app.route("/like/<post_id>", methods=["POST"])
@@ -248,6 +251,44 @@ def like_post(post_id):
         posts.update_one({"_id": ObjectId(post_id)}, {"$set": {"likes": new_likes}})
         return jsonify({"success": True, "likes": new_likes})
     return jsonify({"success": False}), 404
+
+@app.route("/get_comments/<post_id>")
+def get_comments(post_id):
+    post_id = ObjectId(post_id)
+    results = list(comments.find({"post_id": post_id}))
+    # Convert ObjectIds to strings
+    for c in results:
+        c["_id"] = str(c["_id"])
+        c["post_id"] = str(c["post_id"])
+    return jsonify(results)
+
+@app.route("/add_comment/<post_id>", methods=["POST"])
+def add_comment(post_id):
+    data = request.get_json()
+
+    username = data.get("user", "Anonymous").strip() or "Anonymous"
+    text = data.get("text", "").strip()
+    if not text:
+        return jsonify({"error": "Empty comment"}), 400
+
+    comment = {
+        "post_id": ObjectId(post_id),
+        "user": username,
+        "text": text,
+        "created_at": datetime.utcnow()
+    }
+
+    inserted = comments.insert_one(comment)
+    comment["_id"] = str(inserted.inserted_id)
+    comment["post_id"] = post_id
+
+    return jsonify({"message": "Comment added!", "comment": comment})
+
+@app.route("/delete_comment/<comment_id>", methods=["DELETE"])
+def delete_comment(comment_id):
+    comments.delete_one({"_id": ObjectId(comment_id)})
+    return jsonify({"message": "Comment deleted"})
+
 
 
 
