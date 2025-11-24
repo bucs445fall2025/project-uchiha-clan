@@ -3,13 +3,22 @@
 <html>
 
 <head>
-    <title>Recipe Blog</title>
+    <title>COOKY</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="font-sans">
-    <div class="flex justify-between items-center p-2.5 bg-gray-100">
-        <h1 class="text-center text-gray-800 text-2xl">Recipe Blog</h1>
-        <a href="/goals" class="bg-green-500 text-white px-4 py-2 rounded no-underline hover:bg-green-600">Goals</a>
+    <div class="grid grid-cols-3 items-center p-2.5 bg-gray-100">
+      <div></div> <!-- Empty left side for symmetry -->
+
+      <h1 class="text-center text-gray-800 text-2xl font-semibold">
+          COOKY
+      </h1>
+
+      <div class="flex justify-end">
+          <a href="/goals" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+              Goals
+          </a>
+      </div>
     </div>
     
 <!-- Search + Filter -->
@@ -117,7 +126,10 @@
       </div>
     </form>
 
-    <button onclick="toggleFilterModal()" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800">
+    <button 
+      type="button"
+      onclick="toggleFilterModal()" 
+      class="absolute top-3 right-3 text-gray-500 hover:text-gray-800">
       ✕
     </button>
   </div>
@@ -207,6 +219,11 @@ const filterBtn = document.getElementById("filterBtn");
 const filterModal = document.getElementById("filterModal");
 filterBtn.onclick = () => filterModal.classList.remove("hidden");
 window.onclick = (e) => { if (e.target === filterModal) filterModal.classList.add("hidden"); };
+
+function toggleFilterModal() {
+  const modal = document.getElementById("filterModal");
+  modal.classList.toggle("hidden");
+}
 
 // Wait until DOM is fully loaded before attaching handlers
 document.addEventListener("DOMContentLoaded", () => {
